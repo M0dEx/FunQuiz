@@ -1,0 +1,9 @@
+name: FunQuiz
+version: 2.0.0
+main: me.m0dex.funquiz.FunQuiz
+author: M0dEx
+commands:
+    funquiz:
+        description: Main command.
+        usage: /fq
+        aliases: fq

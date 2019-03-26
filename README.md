@@ -1,2 +1,7 @@
 # FunQuiz
-Minecraft plugin for Spigot 1.8 - 1.13
+Recode underway
+
+## TODO
+- Main classes and methods
+- Basic functions
+- Keeping myself from getting this bloated and buggy
