@@ -4,7 +4,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public enum Messages {
 
-    NO_PERMISSION("&e&lYou do not have the permission to do this!");
+    NO_PERMISSION("&e&lYou do not have the permission to do this!"),
+    NOT_A_CONSOLE_COMMAND("&e&lThis is not a console command.");
 
     private String path;
     private String value;
