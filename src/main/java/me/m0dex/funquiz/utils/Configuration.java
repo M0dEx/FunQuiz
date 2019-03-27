@@ -22,17 +22,13 @@ public class Configuration {
         reloadConfig();
     }
 
+
+    /**
+     * Reloads the config and tries to load it into FileConfiguration variable
+     */
     public void reloadConfig() {
 
-        /*
-        Stupid TRY-CATCH block. Nothing I can do about that.
-         */
-
-        try {
-            loadConfig();
-        } catch(IOException ex) {
-            instance.getLogger().severe("Couldn't close input/output streams for config file " + configFile + "\n" + ex.getLocalizedMessage());
-        }
+        loadConfig();
 
         config = new YamlConfiguration();
 
@@ -44,6 +40,11 @@ public class Configuration {
         }
     }
 
+    /**
+     *          Tries to save the config to the specified file
+     * @return  <code>true</code> if saving the config was successful;
+     *          <code>false</code> if it wasn't.
+     */
     public boolean saveConfig() {
 
         try {
@@ -57,34 +58,36 @@ public class Configuration {
         return false;
     }
 
-    private void loadConfig() throws IOException {
+    /**
+     *          Tries to load the config from a file.
+     *          If it does not exist, it then creates it and if there exists a resource in .jar of the plugin, copies its contents from there
+     */
+    private void loadConfig() {
 
         if (!configFile.exists()) {
-            configFile.getParentFile().mkdirs();
-            configFile.createNewFile();
-        }
 
-        InputStream in = instance.getResource(configFile.getName());
-        OutputStream out = new FileOutputStream(configFile);
+            try (InputStream in = instance.getResource(configFile.getName());
+                 OutputStream out = new FileOutputStream(configFile)) {
 
-        try {
-            if (in != null) {
-                int b;
-                while((b = in.read()) != -1)
-                    out.write(b);
+                configFile.getParentFile().mkdirs();
+                configFile.createNewFile();
+
+                if (in != null) {
+                    int b;
+                    while ((b = in.read()) != -1)
+                        out.write(b);
+                }
+
+            } catch (IOException ex) {
+                instance.getLogger().severe("Couldn't write to config file " + configFile + "\n" + ex.getLocalizedMessage());
             }
-
-        } catch(IOException ex) {
-            instance.getLogger().severe("Couldn't write to config file " + configFile + "\n" + ex.getLocalizedMessage());
-        } finally {
-            if(in != null)
-                in.close();
-
-            if(out != null)
-                out.close();
         }
     }
 
+    /**
+     *
+     * @return <code>FileConfiguration</code> or <code>null</code>
+     */
     public FileConfiguration getConfig() {
         return config;
     }

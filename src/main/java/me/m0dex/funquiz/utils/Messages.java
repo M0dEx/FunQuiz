@@ -16,6 +16,10 @@ public enum Messages {
         value = _value;
     }
 
+    /**
+     * Sets the configuration file for messages
+     * @param config    <code>FileConfiguration</code> config file
+     */
     public static void setFile(FileConfiguration config) {
         conf = config;
     }
@@ -28,6 +32,11 @@ public enum Messages {
         return this.path;
     }
 
+    /**
+     *
+     * @param args  Message variables to replace in this format "Replacement"-"%repl1%";"Replacement2"-"%repl2%"
+     * @return      <code>String</code> message specified in the config with variables replaced by specified replacements
+     */
     public String getMessage(String args) {
 
         String output = conf.getString(this.path, this.value);
@@ -38,6 +47,10 @@ public enum Messages {
         return output;
     }
 
+    /**
+     * Gets message from config
+     * @return      <code>String</code> message specified in the config
+     */
     public String getMessage() {
         return conf.getString(this.path, this.value);
     }
