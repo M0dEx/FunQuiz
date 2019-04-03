@@ -4,8 +4,15 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 public enum Messages {
 
+    // Basic messages
     NO_PERMISSION("&e&lYou do not have the permission to do this!"),
-    NOT_A_CONSOLE_COMMAND("&e&lThis is not a console command.");
+    NOT_A_CONSOLE_COMMAND("&e&lThis is not a console command."),
+
+    // Question related messages
+    QUESTION("&a&l%question%"),
+    NO_QUESTION("&e&lThere is no active question!"),
+    QUESTION_END("&e&lThe time to answer the question ran out! The correct answer was: &b&l%answer%");
+
 
     private String path;
     private String value;
