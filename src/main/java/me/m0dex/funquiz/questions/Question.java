@@ -40,6 +40,29 @@ public class Question {
         playersAnswered = new ArrayList<>();
     }
 
+    public int checkAnswer(UUID playerUUID, String answ) {
+
+        /*
+            0 == Wrong answer
+            1 == Right answer but too many people answered already
+            2 == Already answered
+            3 == Right answer
+         */
+
+        if(!answers.contains(answ))
+            return 0;
+
+        if(playersAnswered.size() >= instance.getSettings().answersAccepted)
+            return 1;
+
+        if(playersAnswered.contains(playerUUID))
+            return 2;
+
+        playersAnswered.add(playerUUID);
+
+        return 3;
+    }
+
     public void run() {
         Common.broadcast(Messages.QUESTION.getMessage(question + "-%question%"));
     }

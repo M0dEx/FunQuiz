@@ -11,7 +11,12 @@ public enum Messages {
     // Question related messages
     QUESTION("&a&l%question%"),
     NO_QUESTION("&e&lThere is no active question!"),
-    QUESTION_END("&e&lThe time to answer the question ran out! The correct answer was: &b&l%answer%");
+    QUESTION_END("&e&lThe time to answer the question ran out! The correct answer was: &b&l%answer%&e&l."),
+    ONLY_PLAYERS_CAN_ANSWER("&e&lOnly players can answer questions!"),
+    WRONG_ANSWER("&c&lWrong answer!"),
+    ANSWERED_TOO_LATE("&c&lYou answered too late!"),
+    ALREADY_ANSWERED(""),
+    ANSWERED_CORRECTLY("&a&lYou answered correctly!");
 
 
     private String path;

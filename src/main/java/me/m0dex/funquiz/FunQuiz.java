@@ -1,8 +1,10 @@
 package me.m0dex.funquiz;
 
+import me.m0dex.funquiz.commands.AnswerCommand;
 import me.m0dex.funquiz.commands.CommandExecutor;
 import me.m0dex.funquiz.commands.CommandModule;
 import me.m0dex.funquiz.commands.FunQuizCommand;
+import me.m0dex.funquiz.questions.QuestionManager;
 import me.m0dex.funquiz.utils.Configuration;
 import me.m0dex.funquiz.utils.Settings;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -19,6 +21,7 @@ public class FunQuiz extends JavaPlugin {
     private CommandExecutor cmdExec;
     private Logger log;
     private Settings settings;
+    private QuestionManager questionManager;
 
     private Map<String, CommandModule> commandMap = new HashMap<>();
 
@@ -36,6 +39,10 @@ public class FunQuiz extends JavaPlugin {
             this.getServer().getPluginManager().disablePlugin(this);
             return;
         }
+
+        settings = new Settings(this, getConfig());
+
+        questionManager = new QuestionManager(this, questionsCfg);
 
         registerCommands();
     }
@@ -61,6 +68,7 @@ public class FunQuiz extends JavaPlugin {
     private void registerCommands() {
 
         new FunQuizCommand(this);
+        new AnswerCommand(this, questionManager);
     }
 
     /**
@@ -86,6 +94,8 @@ public class FunQuiz extends JavaPlugin {
 
         return commandMap.get(command.toLowerCase());
     }
+
+    public Settings getSettings() { return settings; }
 
     /**
      * Gets the reference of the current instance of the plugin.
