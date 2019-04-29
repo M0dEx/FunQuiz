@@ -3,6 +3,7 @@ package me.m0dex.funquiz.questions;
 import me.m0dex.funquiz.FunQuiz;
 import me.m0dex.funquiz.utils.Common;
 import me.m0dex.funquiz.utils.Messages;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,9 @@ public class Question {
     List<String> rewards;
 
     List<UUID> playersAnswered;
+    BukkitRunnable timerTask;
+
+    private long timeout;
 
     FunQuiz instance;
 
@@ -64,10 +68,20 @@ public class Question {
     }
 
     public void run() {
+        instance.getQuestionManager().setActiveQuestion(this);
         Common.broadcast(Messages.QUESTION.getMessage(question + "-%question%"));
+        timerTask = (BukkitRunnable) new BukkitRunnable() {
+            @Override
+            public void run() {
+                end();
+                this.cancel();
+            }
+        }.runTaskLater(instance, System.currentTimeMillis()+20*instance.getSettings().timeout);
+        timeout = System.currentTimeMillis()+20*instance.getSettings().timeout;
     }
 
     public void end() {
+        instance.getQuestionManager().setActiveQuestion(null);
         playersAnswered.clear();
         Common.broadcast(Messages.QUESTION_END.getMessage(answers.get(0) + "-%answer%"));
     }

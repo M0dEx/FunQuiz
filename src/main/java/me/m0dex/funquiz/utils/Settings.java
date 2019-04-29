@@ -10,6 +10,7 @@ public class Settings {
     private FileConfiguration config;
 
     public int answersAccepted;
+    public int timeout;
 
     public Settings(FunQuiz _instance, FileConfiguration _config) {
 
@@ -18,5 +19,6 @@ public class Settings {
         config = _config;
 
         answersAccepted = config.getInt("questions.answers-accepted", 1);
+        timeout = config.getInt("questions.timeout", 10);
     }
 }

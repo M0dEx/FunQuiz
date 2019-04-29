@@ -9,13 +9,13 @@ import java.util.List;
 
 public class QuestionManager {
 
-    static FunQuiz instance;
+    private static FunQuiz instance;
 
-    Configuration questionsConf;
+    private Configuration questionsConf;
 
-    List<Question> questions;
+    private List<Question> questions;
 
-    Question activeQuestion;
+    private Question activeQuestion;
 
     public QuestionManager(FunQuiz _instance, Configuration _conf) {
         instance = _instance;
@@ -29,6 +29,8 @@ public class QuestionManager {
     public Question getActiveQuestion() {
         return activeQuestion;
     }
+
+    public void setActiveQuestion(Question question) { activeQuestion = question; }
 
     private void loadQuestions() {
         questions = new ArrayList<>();

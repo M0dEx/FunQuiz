@@ -15,7 +15,7 @@ public enum Messages {
     ONLY_PLAYERS_CAN_ANSWER("&e&lOnly players can answer questions!"),
     WRONG_ANSWER("&c&lWrong answer!"),
     ANSWERED_TOO_LATE("&c&lYou answered too late!"),
-    ALREADY_ANSWERED(""),
+    ALREADY_ANSWERED("&c&lYou've already answered!"),
     ANSWERED_CORRECTLY("&a&lYou answered correctly!");
 
 

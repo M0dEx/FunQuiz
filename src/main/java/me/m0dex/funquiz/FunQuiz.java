@@ -1,12 +1,13 @@
 package me.m0dex.funquiz;
 
-import me.m0dex.funquiz.commands.AnswerCommand;
 import me.m0dex.funquiz.commands.CommandExecutor;
 import me.m0dex.funquiz.commands.CommandModule;
 import me.m0dex.funquiz.commands.FunQuizCommand;
+import me.m0dex.funquiz.listeners.ChatListener;
 import me.m0dex.funquiz.questions.QuestionManager;
 import me.m0dex.funquiz.utils.Configuration;
 import me.m0dex.funquiz.utils.Settings;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -45,6 +46,7 @@ public class FunQuiz extends JavaPlugin {
         questionManager = new QuestionManager(this, questionsCfg);
 
         registerCommands();
+        registerListeners();
     }
 
     /**
@@ -68,7 +70,13 @@ public class FunQuiz extends JavaPlugin {
     private void registerCommands() {
 
         new FunQuizCommand(this);
-        new AnswerCommand(this, questionManager);
+    }
+
+    private void registerListeners() {
+
+        PluginManager pm = this.getServer().getPluginManager();
+
+        pm.registerEvents(new ChatListener(this), this);
     }
 
     /**
@@ -96,6 +104,8 @@ public class FunQuiz extends JavaPlugin {
     }
 
     public Settings getSettings() { return settings; }
+
+    public QuestionManager getQuestionManager() { return questionManager; }
 
     /**
      * Gets the reference of the current instance of the plugin.
