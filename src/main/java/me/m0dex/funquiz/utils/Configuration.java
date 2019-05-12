@@ -18,15 +18,13 @@ public class Configuration {
         instance = _instance;
 
         configFile = new File(Paths.get(instance.getDataFolder().getAbsolutePath(), folder).toFile(), filename);
-
-        reloadConfig();
     }
 
 
     /**
      * Reloads the config and tries to load it into FileConfiguration variable
      */
-    public void reloadConfig() {
+    public boolean reloadConfig() {
 
         loadConfig();
 
@@ -37,7 +35,10 @@ public class Configuration {
 
         } catch(Exception ex) {
             instance.getLogger().severe("Couldn't read config file " + configFile + "\n" + ex.getLocalizedMessage());
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -62,26 +63,31 @@ public class Configuration {
      *          Tries to load the config from a file.
      *          If it does not exist, it then creates it and if there exists a resource in .jar of the plugin, copies its contents from there
      */
-    private void loadConfig() {
+    private boolean loadConfig() {
 
         if (!configFile.exists()) {
 
-            try (InputStream in = instance.getResource(configFile.getName());
-                 OutputStream out = new FileOutputStream(configFile)) {
+            try (InputStream in = instance.getResource(configFile.getName())) {
 
                 configFile.getParentFile().mkdirs();
                 configFile.createNewFile();
 
-                if (in != null) {
-                    int b;
-                    while ((b = in.read()) != -1)
-                        out.write(b);
-                }
+                try (OutputStream out = new FileOutputStream(configFile)) {
 
+                    if (in != null) {
+                        int b;
+                        while ((b = in.read()) != -1)
+                            out.write(b);
+                    }
+
+                }
             } catch (IOException ex) {
                 instance.getLogger().severe("Couldn't write to config file " + configFile + "\n" + ex.getLocalizedMessage());
+                return false;
             }
         }
+
+        return true;
     }
 
     /**

@@ -3,7 +3,9 @@ package me.m0dex.funquiz.questions;
 import me.m0dex.funquiz.FunQuiz;
 import me.m0dex.funquiz.utils.Common;
 import me.m0dex.funquiz.utils.Messages;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class Question {
     List<String> rewards;
 
     List<UUID> playersAnswered;
-    BukkitRunnable timerTask;
+    BukkitTask timerTask;
 
     private long timeout;
 
@@ -29,16 +31,14 @@ public class Question {
 
         name = _name.toUpperCase();
         question = Common.applyColours(_question);
+        answers = new ArrayList<>();
+        rewards = new ArrayList<>();
 
         for(String ans : _answers)
             answers.add(ans.toLowerCase());
 
         for(String rew : _rewards) {
-            rew = QuestionManager.parseReward(rew);
-            if(rew != "")
-                rewards.add(rew);
-            else
-                instance.getLogger().severe("Couldn't load reward \"" + rew + "\"");
+            rewards.add(rew.toLowerCase());
         }
 
         playersAnswered = new ArrayList<>();
@@ -68,21 +68,35 @@ public class Question {
     }
 
     public void run() {
-        instance.getQuestionManager().setActiveQuestion(this);
-        Common.broadcast(Messages.QUESTION.getMessage(question + "-%question%"));
-        timerTask = (BukkitRunnable) new BukkitRunnable() {
+        playersAnswered.clear();
+        Common.broadcast(Messages.QUESTION.getMessage("%question%-" + question ));
+        timerTask = new BukkitRunnable() {
             @Override
             public void run() {
                 end();
-                this.cancel();
             }
-        }.runTaskLater(instance, System.currentTimeMillis()+20*instance.getSettings().timeout);
-        timeout = System.currentTimeMillis()+20*instance.getSettings().timeout;
+        }.runTaskLater(instance, 20*instance.getSettings().timeout);
+        timeout = System.currentTimeMillis()+1000*instance.getSettings().timeout;
     }
 
     public void end() {
+        timerTask.cancel();
         instance.getQuestionManager().setActiveQuestion(null);
-        playersAnswered.clear();
-        Common.broadcast(Messages.QUESTION_END.getMessage(answers.get(0) + "-%answer%"));
+        Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers.get(0)));
+        sendRewards();
     }
+
+    private void sendRewards() {
+        for(UUID uuid : playersAnswered) {
+            Player player = instance.getServer().getPlayer(uuid);
+
+            if(player == null)
+                continue;
+
+            for(String reward : rewards)
+                Common.executeReward(player, reward);
+        }
+    }
+
+    public int getPlayersAnswered() { return playersAnswered.size(); }
 }

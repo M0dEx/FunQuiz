@@ -1,6 +1,7 @@
 package me.m0dex.funquiz.listeners;
 
 import me.m0dex.funquiz.FunQuiz;
+import me.m0dex.funquiz.questions.Question;
 import me.m0dex.funquiz.questions.QuestionManager;
 import me.m0dex.funquiz.utils.Common;
 import me.m0dex.funquiz.utils.Messages;
@@ -26,11 +27,12 @@ public class ChatListener implements Listener {
 
         Player player = e.getPlayer();
         String message = Common.stripColours(e.getMessage());
+        Question question = qm.getActiveQuestion();
 
-        if(qm.getActiveQuestion() == null)
+        if(question == null)
             return;
 
-        switch (qm.getActiveQuestion().checkAnswer(player.getUniqueId(), message.toLowerCase())) {
+        switch (question.checkAnswer(player.getUniqueId(), message.toLowerCase())) {
             case 0:
                 Common.tell(player, Messages.WRONG_ANSWER);
                 break;
@@ -42,6 +44,8 @@ public class ChatListener implements Listener {
                 break;
             case 3:
                 Common.tell(player, Messages.ANSWERED_CORRECTLY);
+                if(question.getPlayersAnswered() == instance.getSettings().answersAccepted)
+                    question.end();
                 break;
         }
 

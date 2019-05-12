@@ -5,10 +5,11 @@ import me.m0dex.funquiz.commands.CommandModule;
 import me.m0dex.funquiz.commands.FunQuizCommand;
 import me.m0dex.funquiz.listeners.ChatListener;
 import me.m0dex.funquiz.questions.QuestionManager;
-import me.m0dex.funquiz.utils.Configuration;
-import me.m0dex.funquiz.utils.Settings;
+import me.m0dex.funquiz.utils.*;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -23,6 +24,9 @@ public class FunQuiz extends JavaPlugin {
     private Logger log;
     private Settings settings;
     private QuestionManager questionManager;
+    private TaskManager taskManager;
+
+    private int questionTaskID;
 
     private Map<String, CommandModule> commandMap = new HashMap<>();
 
@@ -30,13 +34,13 @@ public class FunQuiz extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.instance = this;
+        instance = this;
 
         log = this.getLogger();
         cmdExec = new CommandExecutor(this);
 
         if(!loadConfigs()) {
-            log.severe("Something went wrong while loading the config files...");
+            log.severe("Something went wrong while loading the config files!");
             this.getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -44,9 +48,17 @@ public class FunQuiz extends JavaPlugin {
         settings = new Settings(this, getConfig());
 
         questionManager = new QuestionManager(this, questionsCfg);
+        taskManager = new TaskManager(this);
 
         registerCommands();
         registerListeners();
+        registerTasks();
+    }
+
+    @Override
+    public void onDisable() {
+        taskManager.stopTasks();
+        HandlerList.unregisterAll(this);
     }
 
     /**
@@ -59,9 +71,22 @@ public class FunQuiz extends JavaPlugin {
         messagesCfg =   new Configuration(this, "", "messages.yml");
         questionsCfg =  new Configuration(this, "", "questions.yml");
 
+        boolean success = messagesCfg.reloadConfig() && questionsCfg.reloadConfig();
+
         settings = new Settings(this, this.getConfig());
 
-        return true;
+        Messages.setFile(this.messagesCfg.getConfig());
+        Messages[] arrayOfMessages;
+        int j = (arrayOfMessages = Messages.values()).length;
+        for (int i = 0; i < j; i++) {
+            Messages value = arrayOfMessages[i];
+
+            this.messagesCfg.getConfig().addDefault(value.getPath(), value.getDefault());
+        }
+        this.messagesCfg.getConfig().options().copyDefaults(true);
+        this.messagesCfg.saveConfig();
+
+        return success;
     }
 
     /**
@@ -77,6 +102,16 @@ public class FunQuiz extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
 
         pm.registerEvents(new ChatListener(this), this);
+    }
+
+    private void registerTasks() {
+
+        questionTaskID = taskManager.addTask(new BukkitRunnable() {
+            @Override
+            public void run() {
+                questionManager.askQuestion();
+            }
+        }.runTaskTimer(this, 20*60*settings.interval, 20*60*settings.interval));
     }
 
     /**

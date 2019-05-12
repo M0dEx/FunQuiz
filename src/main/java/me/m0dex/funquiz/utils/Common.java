@@ -1,8 +1,10 @@
 package me.m0dex.funquiz.utils;
 
 import me.m0dex.funquiz.FunQuiz;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -233,4 +235,27 @@ public class Common {
         else
             player.getInventory().addItem(item);
     }
+
+    public static void executeReward(Player player, String reward) {
+
+		if(player == null || reward.equals(""))
+			return;
+
+		String[] args = reward.trim().split(" ");
+
+		if(args.length != 3)
+			return;
+
+		if(args[0].equals("give")) {
+			Material material = Material.matchMaterial(args[1]);
+			int amount = tryParseInt(args[2]);
+
+			if(material == null || amount == 0)
+				return;
+
+			ItemStack item = new ItemStack(material, amount);
+			give(player, item);
+			tell(player, Messages.REWARD_GIVE.getMessage("%item%-" + WordUtils.capitalizeFully(material.toString().toLowerCase().replace("_", " ")) + ";%amount%-" + amount));
+		}
+	}
 }

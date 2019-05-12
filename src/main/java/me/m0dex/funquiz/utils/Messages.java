@@ -5,18 +5,17 @@ import org.bukkit.configuration.file.FileConfiguration;
 public enum Messages {
 
     // Basic messages
-    NO_PERMISSION("&e&lYou do not have the permission to do this!"),
-    NOT_A_CONSOLE_COMMAND("&e&lThis is not a console command."),
+    NO_PERMISSION("&3&lFunQuiz &e&l» &c&lYou do not have the permission to do this!"),
+    NOT_A_CONSOLE_COMMAND("&3&lFunQuiz &e&l» &c&lThis is not a console command."),
 
     // Question related messages
-    QUESTION("&a&l%question%"),
-    NO_QUESTION("&e&lThere is no active question!"),
-    QUESTION_END("&e&lThe time to answer the question ran out! The correct answer was: &b&l%answer%&e&l."),
-    ONLY_PLAYERS_CAN_ANSWER("&e&lOnly players can answer questions!"),
-    WRONG_ANSWER("&c&lWrong answer!"),
-    ANSWERED_TOO_LATE("&c&lYou answered too late!"),
-    ALREADY_ANSWERED("&c&lYou've already answered!"),
-    ANSWERED_CORRECTLY("&a&lYou answered correctly!");
+    QUESTION("&3&lQuestion &e&l» &a&l%question%"),
+    QUESTION_END("&3&lFunQuiz &e&l» The time to answer the question ran out! The correct answer was: &b&l%answer%&e&l."),
+    WRONG_ANSWER("&3&lFunQuiz &e&l» &c&lWrong answer!"),
+    ANSWERED_TOO_LATE("&3&lFunQuiz &e&l» &c&lYou answered too late!"),
+    ALREADY_ANSWERED("&3&lFunQuiz &e&l» &c&lYou've already answered!"),
+    ANSWERED_CORRECTLY("&3&lFunQuiz &e&l» &a&lYou answered correctly!"),
+    REWARD_GIVE("&3&lFunQuiz &e&l» You received &c&l%amount% &e&lof &c&l%item%&e&l!");
 
 
     private String path;

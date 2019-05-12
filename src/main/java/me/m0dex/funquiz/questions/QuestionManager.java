@@ -2,10 +2,12 @@ package me.m0dex.funquiz.questions;
 
 import me.m0dex.funquiz.FunQuiz;
 import me.m0dex.funquiz.utils.Configuration;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class QuestionManager {
 
@@ -17,17 +19,33 @@ public class QuestionManager {
 
     private Question activeQuestion;
 
+    private Random random;
+
     public QuestionManager(FunQuiz _instance, Configuration _conf) {
         instance = _instance;
         questionsConf = _conf;
 
         activeQuestion = null;
 
+        random = new Random();
+
         loadQuestions();
     }
 
     public Question getActiveQuestion() {
         return activeQuestion;
+    }
+
+    public void askQuestion() {
+        int index = random.nextInt(questions.size());
+
+        Question selected = questions.get(index);
+        selected.run();
+        setActiveQuestion(selected);
+    }
+
+    public void askQuestion(String name) {
+        //TODO: Selecting a question
     }
 
     public void setActiveQuestion(Question question) { activeQuestion = question; }
@@ -39,7 +57,7 @@ public class QuestionManager {
 
         for(String key : section.getKeys(false)) {
 
-            String name = key.toUpperCase().replace('-', '_');
+            String name = key.toUpperCase().replace('-', ' ');
             String question = section.getString(key + ".question");
             List<String> answers = section.getStringList(key + ".answers");
             List<String> rewards = section.getStringList(key + ".rewards");
@@ -51,16 +69,5 @@ public class QuestionManager {
 
             questions.add(new Question(name, question, answers, rewards, instance));
         }
-    }
-
-    public static String parseReward(String rew) {
-
-        rew = rew.toLowerCase();
-        String[] args = rew.split(" ");
-
-        if(instance.getCommand(args[0]) != null)
-            return rew;
-
-        return "";
     }
 }
