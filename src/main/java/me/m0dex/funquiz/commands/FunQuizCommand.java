@@ -1,16 +1,18 @@
 package me.m0dex.funquiz.commands;
 
 import me.m0dex.funquiz.FunQuiz;
+import me.m0dex.funquiz.inventories.MainMenuInventory;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public class FunQuizCommand extends CommandModule {
 
     public FunQuizCommand(FunQuiz _instance) {
-        super(_instance, "funquiz", "", 0, 0, true);
+        super(_instance, "funquiz", "funquiz.menu", 0, 0, false);
     }
 
     @Override
     public void run(CommandSender sender, String[] args) {
-        //TODO: Main command
+        MainMenuInventory.INVENTORY.open((Player)sender);
     }
 }

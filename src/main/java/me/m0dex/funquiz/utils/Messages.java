@@ -8,6 +8,9 @@ public enum Messages {
     NO_PERMISSION("&3&lFunQuiz &e&l» &c&lYou do not have the permission to do this!"),
     NOT_A_CONSOLE_COMMAND("&3&lFunQuiz &e&l» &c&lThis is not a console command."),
 
+    // INVENTORY MENUS
+    MAIN_MENU_TITLE("&3&lMain Menu"),
+
     // Question related messages
     QUESTION("&3&lQuestion &e&l» &a&l%question%"),
     QUESTION_END("&3&lFunQuiz &e&l» The time to answer the question ran out! The correct answer was: &b&l%answer%&e&l."),
