@@ -108,6 +108,9 @@ public class FunQuiz extends JavaPlugin {
         pm.registerEvents(new ChatListener(this), this);
     }
 
+    /**
+     * Registers the main tasks
+     */
     private void registerTasks() {
 
         questionTaskID = taskManager.addTask(new BukkitRunnable() {
