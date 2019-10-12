@@ -5,7 +5,6 @@ import me.m0dex.funquiz.utils.Common;
 import me.m0dex.funquiz.utils.Messages;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scheduler.BukkitTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +18,7 @@ public class Question {
     List<String> rewards;
 
     List<UUID> playersAnswered;
-    BukkitTask timerTask;
-
-    private long timeout;
+    int timerTaskID;
 
     FunQuiz instance;
 
@@ -44,7 +41,7 @@ public class Question {
         playersAnswered = new ArrayList<>();
     }
 
-    public int checkAnswer(UUID playerUUID, String answ) {
+    public void checkAnswer(Player player, String answ) {
 
         /*
             0 == Wrong answer
@@ -53,34 +50,43 @@ public class Question {
             3 == Right answer
          */
 
-        if(!answers.contains(answ))
-            return 0;
+        if(!answers.contains(answ)) {
+
+            Common.tell(player, Messages.WRONG_ANSWER);
+            return;
+
+        } else if(playersAnswered.size() >= instance.getSettings().answersAccepted) {
+
+            Common.tell(player, Messages.ANSWERED_TOO_LATE);
+            return;
+
+        } else if(playersAnswered.contains(player.getUniqueId())) {
+
+            Common.tell(player, Messages.ALREADY_ANSWERED);
+            return;
+
+        }
+
+        playersAnswered.add(player.getUniqueId());
+        Common.tell(player, Messages.ANSWERED_CORRECTLY);
 
         if(playersAnswered.size() >= instance.getSettings().answersAccepted)
-            return 1;
-
-        if(playersAnswered.contains(playerUUID))
-            return 2;
-
-        playersAnswered.add(playerUUID);
-
-        return 3;
+            this.end();
     }
 
     public void run() {
         playersAnswered.clear();
         Common.broadcast(Messages.QUESTION.getMessage("%question%-" + question ));
-        timerTask = new BukkitRunnable() {
+        timerTaskID = instance.getTaskManager().addTask(new BukkitRunnable() {
             @Override
             public void run() {
                 end();
             }
-        }.runTaskLater(instance, 20*instance.getSettings().timeout);
-        timeout = System.currentTimeMillis()+1000*instance.getSettings().timeout;
+        }.runTaskLater(instance, 20*instance.getSettings().timeout));
     }
 
     public void end() {
-        timerTask.cancel();
+        instance.getTaskManager().stopTask(timerTaskID);
         instance.getQuestionManager().setActiveQuestion(null);
         Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers.get(0)));
         sendRewards();

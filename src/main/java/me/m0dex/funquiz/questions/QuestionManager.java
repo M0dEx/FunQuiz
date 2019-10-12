@@ -1,5 +1,9 @@
 package me.m0dex.funquiz.questions;
 
+import com.google.api.client.http.GenericUrl;
+import com.google.api.client.http.HttpRequest;
+import com.google.api.client.http.HttpRequestFactory;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import me.m0dex.funquiz.FunQuiz;
 import me.m0dex.funquiz.utils.Configuration;
 import org.bukkit.Bukkit;
@@ -68,6 +72,18 @@ public class QuestionManager {
             }
 
             questions.add(new Question(name, question, answers, rewards, instance));
+        }
+
+        if(instance.getSettings().otdbEnabled) {
+            try {
+                HttpRequestFactory httpFactory = new NetHttpTransport().createRequestFactory();
+                HttpRequest request = httpFactory.buildGetRequest(new GenericUrl(("https://opentdb.com/api.php?amount=50&type=multiple")));
+                //TODO: Get questions from JSON
+
+            } catch (Exception ex) {
+                instance.getLogger().severe("An exception has occured while request Open Trivia DB questions: ");
+                ex.printStackTrace();
+            }
         }
     }
 }

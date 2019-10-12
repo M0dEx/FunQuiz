@@ -26,28 +26,13 @@ public class ChatListener implements Listener {
     public void onAsyncChatEvent(AsyncPlayerChatEvent e) {
 
         Player player = e.getPlayer();
-        String message = Common.stripColours(e.getMessage());
+        String message = Common.stripColours(e.getMessage()).toLowerCase();
         Question question = qm.getActiveQuestion();
 
         if(question == null)
             return;
 
-        switch (question.checkAnswer(player.getUniqueId(), message.toLowerCase())) {
-            case 0:
-                Common.tell(player, Messages.WRONG_ANSWER);
-                break;
-            case 1:
-                Common.tell(player, Messages.ANSWERED_TOO_LATE);
-                break;
-            case 2:
-                Common.tell(player, Messages.ALREADY_ANSWERED);
-                break;
-            case 3:
-                Common.tell(player, Messages.ANSWERED_CORRECTLY);
-                if(question.getPlayersAnswered() == instance.getSettings().answersAccepted)
-                    question.end();
-                break;
-        }
+        question.checkAnswer(player, message);
 
         e.setCancelled(true);
     }

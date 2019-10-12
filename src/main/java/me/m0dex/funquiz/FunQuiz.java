@@ -147,6 +147,8 @@ public class FunQuiz extends JavaPlugin {
 
     public Settings getSettings() { return settings; }
 
+    public TaskManager getTaskManager() { return taskManager; }
+
     public QuestionManager getQuestionManager() { return questionManager; }
 
     public InventoryManager getInventoryManager() { return invManager; }
