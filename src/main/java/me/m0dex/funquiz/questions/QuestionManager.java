@@ -1,9 +1,10 @@
 package me.m0dex.funquiz.questions;
 
 import me.m0dex.funquiz.FunQuiz;
+import me.m0dex.funquiz.questions.opentriviadb.OpenTriviaDB;
 import me.m0dex.funquiz.utils.Configuration;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,13 +12,16 @@ import java.util.Random;
 
 public class QuestionManager {
 
-    private static FunQuiz instance;
-
+    private FunQuiz instance;
+    private OpenTriviaDB otdb;
     private Configuration questionsConf;
 
     private List<Question> questions;
-
+    private List<Question> otdbQuestions;
     private Question activeQuestion;
+    private boolean enabled;
+
+    private int triviaTaskID;
 
     private Random random;
 
@@ -25,9 +29,18 @@ public class QuestionManager {
         instance = _instance;
         questionsConf = _conf;
 
+        otdb = new OpenTriviaDB(instance);
+
+        questions = new ArrayList<>();
+        otdbQuestions = new ArrayList<>();
+
         activeQuestion = null;
 
         random = new Random();
+
+        triviaTaskID = -1;
+
+        enabled = true;
 
         loadQuestions();
     }
@@ -37,9 +50,14 @@ public class QuestionManager {
     }
 
     public void askQuestion() {
-        int index = random.nextInt(questions.size());
 
-        Question selected = questions.get(index);
+        List<Question> allQuestions = new ArrayList<>();
+        allQuestions.addAll(questions);
+        allQuestions.addAll(otdbQuestions);
+
+        int index = random.nextInt(allQuestions.size());
+
+        Question selected = allQuestions.get(index);
         selected.run();
         setActiveQuestion(selected);
     }
@@ -51,7 +69,6 @@ public class QuestionManager {
     public void setActiveQuestion(Question question) { activeQuestion = question; }
 
     private void loadQuestions() {
-        questions = new ArrayList<>();
 
         ConfigurationSection section = questionsConf.getConfig().getConfigurationSection("questions");
 
@@ -68,6 +85,25 @@ public class QuestionManager {
             }
 
             questions.add(new Question(name, question, answers, rewards, instance));
+        }
+
+        if(instance.getSettings().otdbEnabled) {
+            triviaTaskID = instance.getTaskManager().addTask(new BukkitRunnable() {
+                @Override
+                public void run() {
+                    enabled = false;
+
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) {}
+
+                    instance.getLogger().info("Getting Open Trivia DB questions...");
+                    otdbQuestions.clear();
+                    otdbQuestions.addAll(otdb.getQuestions());
+
+                    enabled = true;
+                }
+            }.runTaskTimerAsynchronously(instance, 0, instance.getSettings().interval * 60 * 25 * 20));
         }
     }
 }

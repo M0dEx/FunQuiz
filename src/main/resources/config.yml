@@ -2,3 +2,8 @@ questions:
     answers-accepted: 1
     timeout: 10
     interval: 30
+
+open-trivia-db:
+    enabled: false
+    default-rewards:
+        - give DIAMOND 1

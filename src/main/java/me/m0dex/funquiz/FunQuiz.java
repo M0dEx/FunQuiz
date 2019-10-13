@@ -49,8 +49,8 @@ public class FunQuiz extends JavaPlugin {
 
         settings = new Settings(this, getConfig());
 
-        questionManager = new QuestionManager(this, questionsCfg);
         taskManager = new TaskManager(this);
+        questionManager = new QuestionManager(this, questionsCfg);
         invManager = new InventoryManager(this);
         invManager.init();
 
@@ -108,6 +108,9 @@ public class FunQuiz extends JavaPlugin {
         pm.registerEvents(new ChatListener(this), this);
     }
 
+    /**
+     * Registers the main tasks
+     */
     private void registerTasks() {
 
         questionTaskID = taskManager.addTask(new BukkitRunnable() {
@@ -143,6 +146,8 @@ public class FunQuiz extends JavaPlugin {
     }
 
     public Settings getSettings() { return settings; }
+
+    public TaskManager getTaskManager() { return taskManager; }
 
     public QuestionManager getQuestionManager() { return questionManager; }
 

@@ -31,8 +31,12 @@ public class TaskManager {
         return tID;
     }
 
-    public BukkitTask getTask(int tID) {
-        return tasks.get(tID);
+    public void stopTask(int tID) {
+
+        if(tasks.containsKey(tID))
+            tasks.get(tID).cancel();
+        else
+            instance.getLogger().severe("Couldn't find task with ID: " + tID);
     }
 
     public void stopTasks() {
