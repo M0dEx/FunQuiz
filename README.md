@@ -1,9 +1,8 @@
 # FunQuiz
-Recode underway
+
+## Features
+- Base trivia functions (asking questions, accepting answers, giving rewards)
+- Open Trivia DB implementation (gets 50 random questions from OTDB each 25 questions asked)
 
 ## TODO
-- Main classes and methods
-- Basic functions
-- Keeping myself from getting this bloated and buggy
-
-## Huge thanks to MinusKube for his great SmartInvs API
+- Inventory menus
