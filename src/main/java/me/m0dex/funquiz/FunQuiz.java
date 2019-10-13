@@ -49,8 +49,8 @@ public class FunQuiz extends JavaPlugin {
 
         settings = new Settings(this, getConfig());
 
-        questionManager = new QuestionManager(this, questionsCfg);
         taskManager = new TaskManager(this);
+        questionManager = new QuestionManager(this, questionsCfg);
         invManager = new InventoryManager(this);
         invManager.init();
 
