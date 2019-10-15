@@ -8,8 +8,16 @@ public enum Messages {
     NO_PERMISSION("&3&lFunQuiz &e&l» &c&lYou do not have the permission to do this!"),
     NOT_A_CONSOLE_COMMAND("&3&lFunQuiz &e&l» &c&lThis is not a console command."),
 
-    // INVENTORY MENUS
+    // Inventory menus
     MAIN_MENU_TITLE("&3&lMain Menu"),
+
+    //Question command
+    QUESTIONS_LIST("&3&lList of available questions&e&l:\n%questions%"),
+    QUESTIONS_INVALID("&3&lFunQuiz &e&l» Unknown question:&c&l %name%"),
+    QUESTIONS_INFO("&3&lQuestion %name%&e&l:" +
+            "\n&2&lQuestion: &e%question%" +
+            "\n&2&lAnswers: &e%answers%" +
+            "\n&2&lRewards: &e%rewards%"),
 
     // Question related messages
     QUESTION("&3&lQuestion &e&l» &a&l%question%"),
@@ -49,7 +57,7 @@ public enum Messages {
 
     /**
      *
-     * @param args  Message variables to replace in this format "Replacement"-"%repl1%";"Replacement2"-"%repl2%"
+     * @param args  Message variables to replace in this format "%repl1%"-"Replacement";"%repl2%"-"Replacement2"
      * @return      <code>String</code> message specified in the config with variables replaced by specified replacements
      */
     public String getMessage(String args) {

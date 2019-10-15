@@ -26,7 +26,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                 if(module.allowConsole) {
 
                     if(module.minArgs <= args.length && args.length <= module.maxArgs)
-                        module.run(sender, args);
+                        module.run(sender, new CommandContext(args));
                     else
                         return false;
 
@@ -35,7 +35,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                     if(sender instanceof Player) {
 
                         if (module.minArgs <= args.length && args.length <= module.maxArgs)
-                            module.run(sender, args);
+                            module.run(sender, new CommandContext(args));
                         else
                             return false;
 

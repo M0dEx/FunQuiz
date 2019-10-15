@@ -7,3 +7,6 @@ open-trivia-db:
     enabled: false
     default-rewards:
         - give DIAMOND 1
+
+misc:
+    answer-prefix: '?'

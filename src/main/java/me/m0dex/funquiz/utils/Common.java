@@ -236,7 +236,12 @@ public class Common {
             player.getInventory().addItem(item);
     }
 
-    public static void executeReward(Player player, String reward) {
+	/**
+	 * Parses the reward
+	 * @param player Player to reward
+	 * @param reward Text containing the reward
+	 */
+	public static void executeReward(Player player, String reward) {
 
 		if(player == null || reward.equals(""))
 			return;

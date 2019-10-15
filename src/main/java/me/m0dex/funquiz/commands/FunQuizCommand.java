@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 public class FunQuizCommand extends CommandModule {
 
     public FunQuizCommand(FunQuiz _instance) {
-        super(_instance, "funquiz", "funquiz.menu", 0, 0, false);
+        super(_instance, "funquiz", "funquiz.help", 0, 0, false);
     }
 
     @Override
-    public void run(CommandSender sender, String[] args) {
+    public void run(CommandSender sender, CommandContext args) {
         MainMenuInventory.INVENTORY.open((Player)sender);
     }
 }

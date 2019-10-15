@@ -19,6 +19,11 @@ public class TaskManager {
         tasks = new HashMap<>();
     }
 
+    /**
+     * Adds the task to the monitored Map
+     * @param task Task to add
+     * @return Integer - task ID
+     */
     public int addTask(BukkitTask task) {
 
         int tID = task.getTaskId();
@@ -31,6 +36,10 @@ public class TaskManager {
         return tID;
     }
 
+    /**
+     * Stops the task identified by task ID
+     * @param tID Task ID
+     */
     public void stopTask(int tID) {
 
         if(tasks.containsKey(tID))
@@ -39,6 +48,9 @@ public class TaskManager {
             instance.getLogger().severe("Couldn't find task with ID: " + tID);
     }
 
+    /**
+     * Stops all tasks
+     */
     public void stopTasks() {
         for(int id : tasks.keySet())
             tasks.get(id).cancel();

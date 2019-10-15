@@ -4,6 +4,7 @@ import fr.minuskube.inv.InventoryManager;
 import me.m0dex.funquiz.commands.CommandExecutor;
 import me.m0dex.funquiz.commands.CommandModule;
 import me.m0dex.funquiz.commands.FunQuizCommand;
+import me.m0dex.funquiz.commands.QuestionsCommand;
 import me.m0dex.funquiz.listeners.ChatListener;
 import me.m0dex.funquiz.questions.QuestionManager;
 import me.m0dex.funquiz.utils.*;
@@ -34,6 +35,9 @@ public class FunQuiz extends JavaPlugin {
 
     private static FunQuiz instance;
 
+    /**
+     * Initializes the plugin
+     */
     @Override
     public void onEnable() {
         instance = this;
@@ -59,6 +63,9 @@ public class FunQuiz extends JavaPlugin {
         registerTasks();
     }
 
+    /**
+     * Cleans up variables, tasks and event handlers
+     */
     @Override
     public void onDisable() {
         taskManager.stopTasks();
@@ -99,6 +106,7 @@ public class FunQuiz extends JavaPlugin {
     private void registerCommands() {
 
         new FunQuizCommand(this);
+        new QuestionsCommand(this);
     }
 
     private void registerListeners() {

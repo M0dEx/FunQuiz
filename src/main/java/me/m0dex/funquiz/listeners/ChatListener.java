@@ -32,6 +32,11 @@ public class ChatListener implements Listener {
         if(question == null)
             return;
 
+        if(!message.startsWith(instance.getSettings().answerPrefix))
+            return;
+
+        message = message.replaceFirst(instance.getSettings().answerPrefix, "");
+
         question.checkAnswer(player, message);
 
         e.setCancelled(true);

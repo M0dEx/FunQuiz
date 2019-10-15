@@ -11,12 +11,23 @@ public class Settings {
 
     private FileConfiguration config;
 
+    /*
+        QUESTIONS
+     */
     public int answersAccepted;
     public int timeout;
     public int interval;
 
+    /*
+        OPEN TRIVIA DB
+     */
     public boolean otdbEnabled;
     public List<String> defaultRewards;
+
+    /*
+        MISCELLANEOUS
+     */
+    public String answerPrefix;
 
     public Settings(FunQuiz _instance, FileConfiguration _config) {
 
@@ -25,6 +36,8 @@ public class Settings {
         config = _config;
 
         instance.saveDefaultConfig();
+        instance.getConfig().options().copyDefaults(true);
+        instance.saveConfig();
 
         answersAccepted = config.getInt("questions.answers-accepted", 1);
         timeout = config.getInt("questions.timeout", 10);
@@ -32,5 +45,7 @@ public class Settings {
 
         otdbEnabled = config.getBoolean("open-trivia-db.enabled", false);
         defaultRewards = config.getStringList("open-trivia-db.default-rewards");
+
+        answerPrefix = config.getString("misc.answer-prefix", "?");
     }
 }

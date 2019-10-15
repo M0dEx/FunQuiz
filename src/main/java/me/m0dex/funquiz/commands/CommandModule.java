@@ -1,6 +1,7 @@
 package me.m0dex.funquiz.commands;
 
 import me.m0dex.funquiz.FunQuiz;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 public abstract class CommandModule {
@@ -11,7 +12,7 @@ public abstract class CommandModule {
     public int maxArgs;
     public boolean allowConsole;
 
-    private FunQuiz instance;
+    FunQuiz instance;
 
     public CommandModule(FunQuiz _instance, String _cmdName, String _perm, int _minArgs, int _maxArgs, boolean _allowConsole) {
         this.instance = _instance;
@@ -29,5 +30,5 @@ public abstract class CommandModule {
         instance.addCommand(cmdName, this);
     }
 
-    public abstract void run(CommandSender sender, String[] args);
+    public abstract void run(CommandSender sender, CommandContext args);
 }

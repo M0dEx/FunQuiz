@@ -2,6 +2,7 @@ package me.m0dex.funquiz.questions.opentriviadb;
 
 import me.m0dex.funquiz.FunQuiz;
 import me.m0dex.funquiz.questions.Question;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -29,9 +30,16 @@ public class OpenTriviaDB {
         index = 0;
     }
 
+    /**
+     * Gets 50 multiple-choice questions from the Open Trivia DB API
+     * Should only be used Async
+     * @return List of questions received; can be empty
+     */
     public List<Question> getQuestions() {
 
         List<Question> output = new ArrayList<>();
+
+        instance.getLogger().info("Getting Open Trivia DB questions...");
 
         try {
             URL uri = new URL(url);
@@ -52,13 +60,15 @@ public class OpenTriviaDB {
             for(Object object : questionArray) {
 
                 JSONObject questionObject = (JSONObject) object;
-                String question = (String) questionObject.get("question");
-                String answer = (String) questionObject.get("correct_answer");
+                String question = StringEscapeUtils.unescapeHtml((String) questionObject.get("question"));
+                String answer = StringEscapeUtils.unescapeHtml((String) questionObject.get("correct_answer"));
 
-                output.add(new Question("OTDB-" + index, question, Arrays.asList(answer), instance.getSettings().defaultRewards, instance));
+                output.add(new Question("OTDB_" + index, question, Arrays.asList(answer), instance.getSettings().defaultRewards, instance));
 
                 index++;
             }
+
+            instance.getLogger().info("Got " + output.size() + " questions from Open Trivia DB");
 
         } catch (Exception ex) {
             instance.getLogger().severe("An exception has occured while requesting Open Trivia DB questions: ");
