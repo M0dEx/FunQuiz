@@ -40,19 +40,49 @@ public class QuestionManager {
 
         triviaTaskID = -1;
 
-        enabled = true;
-
         loadQuestions();
+
+        enabled = true;
     }
 
     public Question getActiveQuestion() {
         return activeQuestion;
     }
 
+    public void reload() {
+
+        enabled = false;
+        instance.getTaskManager().stopTask(triviaTaskID);
+
+        questions = new ArrayList<>();
+        otdbQuestions = new ArrayList<>();
+
+        activeQuestion = null;
+
+        triviaTaskID = -1;
+
+        //TODO: Handle saving and reloading
+        questionsConf.reloadConfig();
+
+        loadQuestions();
+
+        enabled = true;
+    }
+
     /**
      * Selects a random question from a list of all questions (questions.yml AND Open Trivia DB, if enabled)
      */
     public void askQuestion() {
+
+        if(!enabled) {
+            instance.getTaskManager().addTask(new BukkitRunnable() {
+                @Override
+                public void run() {
+                    askQuestion();
+                }
+            }.runTaskLater(instance, 10));
+            return;
+        }
 
         List<Question> allQuestions = new ArrayList<>();
         allQuestions.addAll(questions);

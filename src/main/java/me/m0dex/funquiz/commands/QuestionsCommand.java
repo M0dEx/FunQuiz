@@ -13,7 +13,7 @@ import java.util.List;
 public class QuestionsCommand extends CommandModule {
 
     public QuestionsCommand(FunQuiz _instance) {
-        super(_instance, "questions", "funquiz.questions.help", 1, 2, true);
+        super(_instance, "questions", "", 1, 2, true);
     }
 
     @Override
@@ -27,10 +27,20 @@ public class QuestionsCommand extends CommandModule {
                 break;
             case "info":
                 info(sender, args);
+                break;
+            case "ask":
+                ask(sender, args);
+                break;
+            case "reload":
+                reload(sender);
+                break;
         }
     }
 
     private void list(CommandSender sender) {
+
+        if(!Common.hasPermission(sender, "funquiz.questions.list"))
+            return;
 
         List<String> questionNames = instance.getQuestionManager().getQuestionNames();
 
@@ -48,6 +58,9 @@ public class QuestionsCommand extends CommandModule {
 
     private void info(CommandSender sender, CommandContext args) {
 
+        if(!Common.hasPermission(sender, "funquiz.questions.info"))
+            return;
+
         List<String> questionNames = instance.getQuestionManager().getQuestionNames();
 
         if(questionNames.contains(args.getString(1).toUpperCase())) {
@@ -64,5 +77,18 @@ public class QuestionsCommand extends CommandModule {
 
         } else
             Common.tell(sender, Messages.QUESTIONS_INVALID.getMessage("%name%-" + args.getString(1)));
+    }
+
+    private void ask(CommandSender sender, CommandContext args) {
+
+
+    }
+
+    private void reload(CommandSender sender) {
+
+        if(!Common.hasPermission(sender, "funquiz.questions.reload"))
+            return;
+
+        instance.getQuestionManager().reload();
     }
 }

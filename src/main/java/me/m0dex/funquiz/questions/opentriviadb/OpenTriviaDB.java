@@ -57,11 +57,16 @@ public class OpenTriviaDB {
 
             JSONArray questionArray = (JSONArray) response.get("results");
 
+            index = 0;
+
             for(Object object : questionArray) {
 
                 JSONObject questionObject = (JSONObject) object;
                 String question = StringEscapeUtils.unescapeHtml((String) questionObject.get("question"));
                 String answer = StringEscapeUtils.unescapeHtml((String) questionObject.get("correct_answer"));
+
+                if(question.contains("following"))
+                    continue;
 
                 output.add(new Question("OTDB_" + index, question, Arrays.asList(answer), instance.getSettings().defaultRewards, instance));
 
