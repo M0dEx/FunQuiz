@@ -22,6 +22,7 @@ public class QuestionManager {
     private boolean enabled;
 
     private int triviaTaskID;
+    private int questionTaskID;
 
     private Random random;
 
@@ -43,6 +44,8 @@ public class QuestionManager {
         loadQuestions();
 
         enabled = true;
+
+        registerQuestionTask();
     }
 
     public Question getActiveQuestion() {
@@ -94,8 +97,17 @@ public class QuestionManager {
         selected.run();
     }
 
-    public void askQuestion(String name) {
-        //TODO: Selecting a question
+    public boolean askQuestion(String name) {
+
+        Question selected = getQuestion(name);
+
+        if(selected != null) {
+            selected.run();
+            return true;
+        }
+
+        instance.getLogger().warning("Question \"" + name + "\" doesn't exist");
+        return false;
     }
 
     public Question getQuestion(String name) {
@@ -109,23 +121,36 @@ public class QuestionManager {
                 return question;
         }
 
-        return allQuestions.get(0);
+        return null;
     }
 
-    public List<String> getQuestionNames() {
-        List<String> output = new ArrayList<>();
+    public List<Question> getQuestions() {
 
         List<Question> allQuestions = new ArrayList<>();
         allQuestions.addAll(questions);
         allQuestions.addAll(otdbQuestions);
 
-        for(Question question : allQuestions)
-            output.add(question.name);
-
-        return output;
+        return allQuestions;
     }
 
     public void setActiveQuestion(Question question) { activeQuestion = question; }
+
+    private void registerQuestionTask() {
+
+        questionTaskID = instance.getTaskManager().addTask(new BukkitRunnable() {
+            @Override
+            public void run() {
+                askQuestion();
+            }
+        }.runTaskTimer(instance, 20*60*instance.getSettings().interval, 20*60*instance.getSettings().interval));
+    }
+
+    public void restartQuestionTask() {
+
+        instance.getTaskManager().stopTask(questionTaskID);
+
+        registerQuestionTask();
+    }
 
     /**
      * Loads questions from questions.yml and Open Trivia DB if it's enabled

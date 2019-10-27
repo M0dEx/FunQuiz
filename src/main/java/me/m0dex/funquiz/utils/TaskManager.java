@@ -1,6 +1,7 @@
 package me.m0dex.funquiz.utils;
 
 import me.m0dex.funquiz.FunQuiz;
+import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.HashMap;
@@ -34,6 +35,16 @@ public class TaskManager {
         tasks.put(tID, task);
 
         return tID;
+    }
+
+    public BukkitTask getTask(int tID) {
+
+        if(tasks.containsKey(tID))
+            return tasks.get(tID);
+        else
+            instance.getLogger().severe("Couldn't find task with ID: " + tID);
+
+        return null;
     }
 
     /**

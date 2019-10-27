@@ -10,7 +10,6 @@ import me.m0dex.funquiz.utils.*;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,8 +25,6 @@ public class FunQuiz extends JavaPlugin {
     private Settings settings;
     private QuestionManager questionManager;
     private TaskManager taskManager;
-
-    private int questionTaskID;
 
     private Map<String, CommandModule> commandMap = new HashMap<>();
 
@@ -56,7 +53,6 @@ public class FunQuiz extends JavaPlugin {
 
         registerCommands();
         registerListeners();
-        registerTasks();
     }
 
     /**
@@ -110,19 +106,6 @@ public class FunQuiz extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
 
         pm.registerEvents(new ChatListener(this), this);
-    }
-
-    /**
-     * Registers the main tasks
-     */
-    private void registerTasks() {
-
-        questionTaskID = taskManager.addTask(new BukkitRunnable() {
-            @Override
-            public void run() {
-                questionManager.askQuestion();
-            }
-        }.runTaskTimer(this, 20*60*settings.interval, 20*60*settings.interval));
     }
 
     /**

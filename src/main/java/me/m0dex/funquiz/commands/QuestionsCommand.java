@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class QuestionsCommand extends CommandModule {
 
@@ -42,18 +43,11 @@ public class QuestionsCommand extends CommandModule {
         if(!Common.hasPermission(sender, "funquiz.questions.list"))
             return;
 
-        List<String> questionNames = instance.getQuestionManager().getQuestionNames();
+        List<Question> questions = instance.getQuestionManager().getQuestions();
 
-        StringBuilder questions = new StringBuilder();
-        questions.append("&r&a");
-        questions.append(questionNames.get(0));
+        String questionList = questions.stream().map(Question::getName).collect(Collectors.joining("&r, &a"));
 
-        for(int i = 1; i < questionNames.size(); i++) {
-            questions.append("&r, &a");
-            questions.append(questionNames.get(i));
-        }
-
-        Common.tell(sender, Messages.QUESTIONS_LIST.getMessage("%questions%-" + questions.toString()));
+        Common.tell(sender, Messages.QUESTIONS_LIST.getMessage("%questions%-" + questionList));
     }
 
     private void info(CommandSender sender, CommandContext args) {
@@ -61,14 +55,9 @@ public class QuestionsCommand extends CommandModule {
         if(!Common.hasPermission(sender, "funquiz.questions.info"))
             return;
 
-        List<String> questionNames = instance.getQuestionManager().getQuestionNames();
+        Question question = instance.getQuestionManager().getQuestion(args.getString(1));
 
-        if(questionNames.contains(args.getString(1).toUpperCase())) {
-
-            Question question = instance.getQuestionManager().getQuestion(args.getString(1));
-
-            String answers = String.join(", " + question.getAnswers());
-            String rewards = String.join(", " + question.getRewards());
+        if(question != null) {
 
             Common.tell(sender, Messages.QUESTIONS_INFO.getMessage("%name%-" + question.getName() +
                     ";%question%-" + question.getQuestion() +
@@ -81,7 +70,25 @@ public class QuestionsCommand extends CommandModule {
 
     private void ask(CommandSender sender, CommandContext args) {
 
+        if(!Common.hasPermission(sender, "funquiz.questions.ask"))
+            return;
 
+        if(args.getString(1).equals("")) {
+
+            instance.getQuestionManager().askQuestion();
+            instance.getQuestionManager().restartQuestionTask();
+            Common.tell(sender, Messages.QUESTIONS_ASKED);
+
+        } else {
+
+            boolean done = instance.getQuestionManager().askQuestion(args.getString(1));
+            if(done) {
+                instance.getQuestionManager().restartQuestionTask();
+                Common.tell(sender, Messages.QUESTIONS_ASKED);
+            } else {
+                Common.tell(sender, Messages.QUESTIONS_INVALID);
+            }
+        }
     }
 
     private void reload(CommandSender sender) {

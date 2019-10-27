@@ -14,6 +14,7 @@ public enum Messages {
     //Question command
     QUESTIONS_LIST("&3&lList of available questions&e&l:\n%questions%"),
     QUESTIONS_INVALID("&3&lFunQuiz &e&l» Unknown question:&c&l %name%"),
+    QUESTIONS_ASKED("&3&lFunQuiz &e&l» Questions asked!"),
     QUESTIONS_INFO("&3&lQuestion %name%&e&l:" +
             "\n&2&lQuestion: &e%question%" +
             "\n&2&lAnswers: &e%answers%" +
