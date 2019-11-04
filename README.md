@@ -5,4 +5,8 @@
 - Open Trivia DB implementation (gets 50 random questions from OTDB each 25 questions asked)
 
 ## TODO
-- Inventory menus
+- Interactive question adding
+- TextComponent (SpigotAPI for JSON messages) -> interactive messages
+- Updater
+- bStats
+- Translation
