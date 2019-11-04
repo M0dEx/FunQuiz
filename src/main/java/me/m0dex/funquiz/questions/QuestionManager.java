@@ -75,9 +75,12 @@ public class QuestionManager {
     /**
      * Selects a random question from a list of all questions (questions.yml AND Open Trivia DB, if enabled)
      */
-    public void askQuestion() {
+    public int askQuestion() {
 
-        if(!enabled) {
+        if(activeQuestion != null)
+            return 1;
+
+        /*if(!enabled) {
             instance.getTaskManager().addTask(new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -85,7 +88,7 @@ public class QuestionManager {
                 }
             }.runTaskLater(instance, 10));
             return;
-        }
+        }*/
 
         List<Question> allQuestions = new ArrayList<>();
         allQuestions.addAll(questions);
@@ -95,19 +98,24 @@ public class QuestionManager {
 
         Question selected = allQuestions.get(index);
         selected.run();
+
+        return 0;
     }
 
-    public boolean askQuestion(String name) {
+    public int askQuestion(String name) {
+
+        if(activeQuestion != null)
+            return 2;
 
         Question selected = getQuestion(name);
 
-        if(selected != null) {
-            selected.run();
-            return true;
+        if(selected == null) {
+            instance.getLogger().warning("Question \"" + name + "\" doesn't exist");
+            return 1;
         }
 
-        instance.getLogger().warning("Question \"" + name + "\" doesn't exist");
-        return false;
+        selected.run();
+        return 0;
     }
 
     public Question getQuestion(String name) {
@@ -133,7 +141,7 @@ public class QuestionManager {
         return allQuestions;
     }
 
-    public void setActiveQuestion(Question question) { activeQuestion = question; }
+    void setActiveQuestion(Question question) { activeQuestion = question; }
 
     private void registerQuestionTask() {
 

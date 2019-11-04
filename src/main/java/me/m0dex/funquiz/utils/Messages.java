@@ -8,17 +8,24 @@ public enum Messages {
     NO_PERMISSION("&3&lFunQuiz &e&l» &c&lYou do not have the permission to do this!"),
     NOT_A_CONSOLE_COMMAND("&3&lFunQuiz &e&l» &c&lThis is not a console command."),
 
-    // Inventory menus
-    MAIN_MENU_TITLE("&3&lMain Menu"),
-
     //Question command
-    QUESTIONS_LIST("&3&lList of available questions&e&l:\n%questions%"),
-    QUESTIONS_INVALID("&3&lFunQuiz &e&l» Unknown question:&c&l %name%"),
-    QUESTIONS_ASKED("&3&lFunQuiz &e&l» Questions asked!"),
+    QUESTIONS_LIST("&3&lList of available questions&e&l:\n&r&a%questions%"),
+    QUESTIONS_INVALID("&3&lFunQuiz &e&l» &c&lUnknown question:&c&l %name%"),
+    QUESTIONS_ALREADY_ACTIVE("&3&lFunQuiz &e&l» &c&lThere's already an active question."),
+    QUESTIONS_ASKED("&3&lFunQuiz &e&l» Question asked!"),
     QUESTIONS_INFO("&3&lQuestion %name%&e&l:" +
             "\n&2&lQuestion: &e%question%" +
             "\n&2&lAnswers: &e%answers%" +
             "\n&2&lRewards: &e%rewards%"),
+    QUESTIONS_HELP("&e&l--------------- &3&lQuestions Help&e&l ---------------" +
+            "\n&2/questions list &e» &bLists the names of all questions" +
+            "\n " +
+            "\n&2/questions info <name> &e» &bDisplays information about the given question (question, answers, rewards)" +
+            "\n " +
+            "\n&2/questions ask [name] &e» &bAsks a random question if the name is not given, otherwise asks the given question" +
+            "\n " +
+            "\n&2/questions reload &e» &bReloads all questions and refreshes OTDB questions (if OTDB is enabled)" +
+            "\n "),
 
     // Question related messages
     QUESTION("&3&lQuestion &e&l» &a&l%question%"),

@@ -53,9 +53,10 @@ public class TaskManager {
      */
     public void stopTask(int tID) {
 
-        if(tasks.containsKey(tID))
+        if(tasks.containsKey(tID)) {
             tasks.get(tID).cancel();
-        else
+            tasks.remove(tID);
+        } else
             instance.getLogger().severe("Couldn't find task with ID: " + tID);
     }
 

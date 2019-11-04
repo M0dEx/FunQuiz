@@ -14,13 +14,11 @@ import java.util.stream.Collectors;
 public class QuestionsCommand extends CommandModule {
 
     public QuestionsCommand(FunQuiz _instance) {
-        super(_instance, "questions", "", 1, 2, true);
+        super(_instance, "questions", "", 0, 2, true);
     }
 
     @Override
     public void run(CommandSender sender, CommandContext args) {
-
-        instance.getLogger().info(args.getString(0));
 
         switch(args.getString(0).toLowerCase()) {
             case "list":
@@ -34,6 +32,9 @@ public class QuestionsCommand extends CommandModule {
                 break;
             case "reload":
                 reload(sender);
+                break;
+            default:
+                help(sender);
                 break;
         }
     }
@@ -75,18 +76,23 @@ public class QuestionsCommand extends CommandModule {
 
         if(args.getString(1).equals("")) {
 
-            instance.getQuestionManager().askQuestion();
-            instance.getQuestionManager().restartQuestionTask();
-            Common.tell(sender, Messages.QUESTIONS_ASKED);
-
-        } else {
-
-            boolean done = instance.getQuestionManager().askQuestion(args.getString(1));
-            if(done) {
+            if(instance.getQuestionManager().askQuestion() == 0) {
                 instance.getQuestionManager().restartQuestionTask();
                 Common.tell(sender, Messages.QUESTIONS_ASKED);
             } else {
-                Common.tell(sender, Messages.QUESTIONS_INVALID);
+                Common.tell(sender, Messages.QUESTIONS_ALREADY_ACTIVE);
+            }
+
+        } else {
+
+            int status = instance.getQuestionManager().askQuestion(args.getString(1));
+            if(status == 0) {
+                instance.getQuestionManager().restartQuestionTask();
+                Common.tell(sender, Messages.QUESTIONS_ASKED);
+            } else if(status == 1) {
+                Common.tell(sender, Messages.QUESTIONS_INVALID.getMessage("%name%-" + args.getString(1)));
+            } else {
+                Common.tell(sender, Messages.QUESTIONS_ALREADY_ACTIVE);
             }
         }
     }
@@ -97,5 +103,12 @@ public class QuestionsCommand extends CommandModule {
             return;
 
         instance.getQuestionManager().reload();
+    }
+
+    private void help(CommandSender sender) {
+        if(!Common.hasPermission(sender, "funquiz.questions.help"))
+            return;
+
+        Common.tell(sender, Messages.QUESTIONS_HELP);
     }
 }
