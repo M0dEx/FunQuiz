@@ -25,5 +25,4 @@
 - Interactive question adding
 - TextComponent (SpigotAPI for JSON messages) -> interactive messages
 - Updater
-- bStats
 - Translation

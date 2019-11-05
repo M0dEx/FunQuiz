@@ -74,26 +74,27 @@ public class QuestionsCommand extends CommandModule {
         if(!Common.hasPermission(sender, "funquiz.questions.ask"))
             return;
 
-        if(args.getString(1).equals("")) {
+        int result;
 
-            if(instance.getQuestionManager().askQuestion() == 0) {
+        if(args.getString(1).equals(""))
+            result = instance.getQuestionManager().askQuestion();
+        else
+            result = instance.getQuestionManager().askQuestion(args.getString(1));
+
+        switch(result) {
+            case 0:
                 instance.getQuestionManager().restartQuestionTask();
                 Common.tell(sender, Messages.QUESTIONS_ASKED);
-            } else {
-                Common.tell(sender, Messages.QUESTIONS_ALREADY_ACTIVE);
-            }
-
-        } else {
-
-            int status = instance.getQuestionManager().askQuestion(args.getString(1));
-            if(status == 0) {
-                instance.getQuestionManager().restartQuestionTask();
-                Common.tell(sender, Messages.QUESTIONS_ASKED);
-            } else if(status == 1) {
+                break;
+            case 1:
                 Common.tell(sender, Messages.QUESTIONS_INVALID.getMessage("%name%-" + args.getString(1)));
-            } else {
+                break;
+            case 2:
+                Common.tell(sender, Messages.NOT_ENOUGH_PLAYERS);
+                break;
+            case 3:
                 Common.tell(sender, Messages.QUESTIONS_ALREADY_ACTIVE);
-            }
+                break;
         }
     }
 

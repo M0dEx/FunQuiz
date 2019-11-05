@@ -14,6 +14,7 @@ public class Settings {
     /*
         QUESTIONS
      */
+    public int minPlayers;
     public int answersAccepted;
     public int timeout;
     public int interval;
@@ -39,6 +40,7 @@ public class Settings {
         instance.getConfig().options().copyDefaults(true);
         instance.saveConfig();
 
+        minPlayers = config.getInt("questions.min-players", 3);
         answersAccepted = config.getInt("questions.answers-accepted", 1);
         timeout = config.getInt("questions.timeout", 10);
         interval = config.getInt("questions.interval", 30);

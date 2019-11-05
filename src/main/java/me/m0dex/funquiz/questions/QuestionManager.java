@@ -77,34 +77,19 @@ public class QuestionManager {
      */
     public int askQuestion() {
 
-        if(activeQuestion != null)
-            return 1;
-
-        /*if(!enabled) {
-            instance.getTaskManager().addTask(new BukkitRunnable() {
-                @Override
-                public void run() {
-                    askQuestion();
-                }
-            }.runTaskLater(instance, 10));
-            return;
-        }*/
-
-        List<Question> allQuestions = new ArrayList<>();
-        allQuestions.addAll(questions);
-        allQuestions.addAll(otdbQuestions);
+        List<Question> allQuestions = getQuestions();
 
         int index = random.nextInt(allQuestions.size());
 
-        Question selected = allQuestions.get(index);
-        selected.run();
-
-        return 0;
+        return askQuestion(allQuestions.get(index).name);
     }
 
     public int askQuestion(String name) {
 
         if(activeQuestion != null)
+            return 3;
+
+        if(instance.getServer().getOnlinePlayers().size() < instance.getSettings().minPlayers)
             return 2;
 
         Question selected = getQuestion(name);

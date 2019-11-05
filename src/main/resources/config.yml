@@ -1,4 +1,5 @@
 questions:
+    min-players: 3
     answers-accepted: 1
     timeout: 10
     interval: 30

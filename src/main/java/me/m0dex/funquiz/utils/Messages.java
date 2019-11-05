@@ -29,6 +29,7 @@ public enum Messages {
 
     // Question related messages
     QUESTION("&3&lQuestion &e&l» &a&l%question%"),
+    NOT_ENOUGH_PLAYERS("&3&lFunQuiz &e&l» &c&lThere is not enough players for FunQuiz to ask questions!"),
     QUESTION_END("&3&lFunQuiz &e&l» The time to answer the question ran out! The correct answer was: &b&l%answer%&e&l."),
     WRONG_ANSWER("&3&lFunQuiz &e&l» &c&lWrong answer!"),
     ANSWERED_TOO_LATE("&3&lFunQuiz &e&l» &c&lYou answered too late!"),

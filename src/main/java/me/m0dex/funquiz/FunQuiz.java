@@ -1,5 +1,6 @@
 package me.m0dex.funquiz;
 
+import me.m0dex.funquiz.bstats.Metrics;
 import me.m0dex.funquiz.commands.CommandExecutor;
 import me.m0dex.funquiz.commands.CommandModule;
 import me.m0dex.funquiz.commands.FunQuizCommand;
@@ -28,6 +29,8 @@ public class FunQuiz extends JavaPlugin {
 
     private Map<String, CommandModule> commandMap = new HashMap<>();
 
+    private Metrics metrics;
+
     private static FunQuiz instance;
 
     /**
@@ -53,6 +56,7 @@ public class FunQuiz extends JavaPlugin {
 
         registerCommands();
         registerListeners();
+        initializeMetrics();
     }
 
     /**
@@ -106,6 +110,16 @@ public class FunQuiz extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
 
         pm.registerEvents(new ChatListener(this), this);
+    }
+
+    /**
+     * Initializes metrics and custom graphs
+     */
+    private void initializeMetrics() {
+
+        metrics = new Metrics(this);
+
+        metrics.addCustomChart(new Metrics.SimplePie("open_trivia_db", () -> (instance.getSettings().otdbEnabled ? "Enabled" : "Disabled")));
     }
 
     /**
