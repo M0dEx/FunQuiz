@@ -8,7 +8,19 @@ public enum Messages {
     NO_PERMISSION("&3&lFunQuiz &e&l» &c&lYou do not have the permission to do this!"),
     NOT_A_CONSOLE_COMMAND("&3&lFunQuiz &e&l» &c&lThis is not a console command."),
 
-    //Question command
+    // Inventories
+    INVENTORY_MAIN_MENU_TITLE("&3&lMain Menu"),
+    INVENTORY_QUESTION_LIST_TITLE("&3&lQuestion List"),
+    INVENTORY_BACK("&c&lBack"),
+    INVENTORY_EXIT("&c&lExit"),
+    INVENTORY_QUESTION_LIST("&2&lQuestion List"),
+    INVENTORY_ASK_RANDOM("&2&lAsk a random question"),
+    INVENTORY_QUESTION_NAME("&6&l%name%"),
+    INVENTORY_QUESTION_QUESTION("&2&lQuestion: &e%question%"),
+    INVENTORY_QUESTION_ANSWERS("&2&lAnswers: &e%answers%"),
+    INVENTORY_QUESTION_REWARDS("&2&lRewards: &e%rewards%"),
+
+    // Question command
     QUESTIONS_LIST("&3&lList of available questions&e&l:\n&r&a%questions%"),
     QUESTIONS_INVALID("&3&lFunQuiz &e&l» &c&lUnknown question:&c&l %name%"),
     QUESTIONS_ALREADY_ACTIVE("&3&lFunQuiz &e&l» &c&lThere's already an active question."),

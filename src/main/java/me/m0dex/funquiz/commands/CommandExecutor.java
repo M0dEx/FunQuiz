@@ -28,7 +28,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                     if(module.minArgs <= args.length && args.length <= module.maxArgs)
                         module.run(sender, new CommandContext(args));
                     else
-                        return false;
+                        module.help(sender);
 
                 } else {
 
@@ -37,7 +37,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
                         if (module.minArgs <= args.length && args.length <= module.maxArgs)
                             module.run(sender, new CommandContext(args));
                         else
-                            return false;
+                            module.help(sender);
 
                     } else
                         Common.tell(sender, Messages.NOT_A_CONSOLE_COMMAND);

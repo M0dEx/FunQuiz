@@ -1,5 +1,6 @@
 package me.m0dex.funquiz;
 
+import fr.minuskube.inv.InventoryManager;
 import me.m0dex.funquiz.bstats.Metrics;
 import me.m0dex.funquiz.commands.CommandExecutor;
 import me.m0dex.funquiz.commands.CommandModule;
@@ -25,6 +26,7 @@ public class FunQuiz extends JavaPlugin {
     private Logger log;
     private Settings settings;
     private QuestionManager questionManager;
+    private InventoryManager inventoryManager;
     private TaskManager taskManager;
 
     private Map<String, CommandModule> commandMap = new HashMap<>();
@@ -53,6 +55,7 @@ public class FunQuiz extends JavaPlugin {
 
         taskManager = new TaskManager(this);
         questionManager = new QuestionManager(this, questionsCfg);
+        inventoryManager = new InventoryManager(this);
 
         registerCommands();
         registerListeners();
@@ -151,6 +154,7 @@ public class FunQuiz extends JavaPlugin {
     public TaskManager getTaskManager() { return taskManager; }
 
     public QuestionManager getQuestionManager() { return questionManager; }
+    public InventoryManager getInventoryManager() { return inventoryManager; }
 
     /**
      * Gets the reference of the current instance of the plugin.

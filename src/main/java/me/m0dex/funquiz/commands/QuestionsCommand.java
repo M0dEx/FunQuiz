@@ -20,7 +20,7 @@ public class QuestionsCommand extends CommandModule {
     @Override
     public void run(CommandSender sender, CommandContext args) {
 
-        switch(args.getString(0).toLowerCase()) {
+        switch(args.getString(0)) {
             case "list":
                 list(sender);
                 break;
@@ -106,7 +106,8 @@ public class QuestionsCommand extends CommandModule {
         instance.getQuestionManager().reload();
     }
 
-    private void help(CommandSender sender) {
+    @Override
+    public void help(CommandSender sender) {
         if(!Common.hasPermission(sender, "funquiz.questions.help"))
             return;
 

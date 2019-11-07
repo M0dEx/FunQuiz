@@ -31,4 +31,5 @@ public abstract class CommandModule {
     }
 
     public abstract void run(CommandSender sender, CommandContext args);
+    public abstract void help(CommandSender sender);
 }

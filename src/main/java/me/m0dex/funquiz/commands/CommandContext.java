@@ -13,7 +13,7 @@ public class CommandContext {
     public String getString(int index) {
 
         if(index >= 0 && index < args.length)
-            return args[index];
+            return args[index].toLowerCase();
         else
             return "";
     }
