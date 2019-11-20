@@ -56,6 +56,7 @@ public class FunQuiz extends JavaPlugin {
         taskManager = new TaskManager(this);
         questionManager = new QuestionManager(this, questionsCfg);
         inventoryManager = new InventoryManager(this);
+        inventoryManager.init();
 
         registerCommands();
         registerListeners();
@@ -69,6 +70,14 @@ public class FunQuiz extends JavaPlugin {
     public void onDisable() {
         taskManager.stopTasks();
         HandlerList.unregisterAll(this);
+    }
+
+    public void reload() {
+
+        //TODO: Proper reload
+
+        onEnable();
+        onDisable();
     }
 
     /**

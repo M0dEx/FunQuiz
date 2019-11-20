@@ -31,6 +31,7 @@ public class FunQuizCommand extends CommandModule {
     }
 
     private void menu(CommandSender sender) {
+
         if(!Common.hasPermission(sender, "funquiz.menu.main"))
             return;
 
@@ -42,6 +43,11 @@ public class FunQuizCommand extends CommandModule {
 
     private void reload(CommandSender sender) {
 
+        if(!Common.hasPermission(sender, "funquiz.reload"))
+            return;
+
+        Common.tell(sender, Messages.RELOADED);
+        instance.reload();
     }
 
     @Override

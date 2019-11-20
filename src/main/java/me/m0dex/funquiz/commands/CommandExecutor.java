@@ -21,7 +21,7 @@ public class CommandExecutor implements org.bukkit.command.CommandExecutor {
         CommandModule module = instance.getCommandModule(cmd.getName());
         if(module != null) {
 
-            if(Common.hasPermission(sender, module.perm) || module.perm.equals("")) {
+            if(sender.hasPermission(module.perm) || module.perm.equals("")) {
 
                 if(module.allowConsole) {
 

@@ -32,22 +32,8 @@ public class MainMenuInventory implements InventoryProvider {
         contents.set(1, 4, ClickableItem.of(
                 Inventories.createItem(new ItemStack(Material.SAPLING, 1), Messages.INVENTORY_QUESTION_LIST.getMessage()),
                 e -> {
-                    player.closeInventory();
                     Inventories.QuestionList.open(player);
                 }));
-
-        List<ClickableItem> questionItems = new ArrayList<>();
-
-        for(Question question : FunQuiz.getInstance().getQuestionManager().getQuestions()) {
-
-            ItemStack item = new ItemStack(Material.ENCHANTED_BOOK, 1);
-
-            ItemMeta meta = item.getItemMeta();
-            List<String> lore = new ArrayList<>();
-
-            meta.setDisplayName(Common.applyColours(Messages.INVENTORY_QUESTION_NAME.getMessage("%name%-" + question.getName())));
-            lore.add(Common.applyColours(Messages.INVENTORY_QUESTION_QUESTION.getMessage("%question%-" + question.getQuestion())));
-        }
     }
 
     @Override

@@ -105,11 +105,7 @@ public class QuestionManager {
 
     public Question getQuestion(String name) {
 
-        List<Question> allQuestions = new ArrayList<>();
-        allQuestions.addAll(questions);
-        allQuestions.addAll(otdbQuestions);
-
-        for(Question question : allQuestions) {
+        for(Question question : getQuestions()) {
             if(question.name.equalsIgnoreCase(name))
                 return question;
         }
@@ -130,6 +126,11 @@ public class QuestionManager {
 
     private void registerQuestionTask() {
 
+        if(instance.getSettings().interval <= 0 || instance.getSettings().interval > 10000) {
+            instance.getLogger().info("The interval in config.yml is too low or too high. The task is disabled until you provide a valid interval. (1 - 10000). If you entered 0 to turn the task off, you can ignore this message.");
+            return;
+        }
+
         questionTaskID = instance.getTaskManager().addTask(new BukkitRunnable() {
             @Override
             public void run() {
@@ -140,7 +141,8 @@ public class QuestionManager {
 
     public void restartQuestionTask() {
 
-        instance.getTaskManager().stopTask(questionTaskID);
+        if(questionTaskID != -1)
+            instance.getTaskManager().stopTask(questionTaskID);
 
         registerQuestionTask();
     }

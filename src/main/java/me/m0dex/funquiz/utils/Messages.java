@@ -7,6 +7,7 @@ public enum Messages {
     // Basic messages
     NO_PERMISSION("&3&lFunQuiz &e&l» &c&lYou do not have the permission to do this!"),
     NOT_A_CONSOLE_COMMAND("&3&lFunQuiz &e&l» &c&lThis is not a console command."),
+    RELOADED("&3&lFunQuiz &e&l» &a&lThe plugin was reloaded!"),
 
     // Inventories
     INVENTORY_MAIN_MENU_TITLE("&3&lMain Menu"),
@@ -19,6 +20,8 @@ public enum Messages {
     INVENTORY_QUESTION_QUESTION("&2&lQuestion: &e%question%"),
     INVENTORY_QUESTION_ANSWERS("&2&lAnswers: &e%answers%"),
     INVENTORY_QUESTION_REWARDS("&2&lRewards: &e%rewards%"),
+    INVENTORY_PREVIOUS("&e&lPrevious page"),
+    INVENTORY_NEXT("&e&lNext page"),
 
     // Question command
     QUESTIONS_LIST("&3&lList of available questions&e&l:\n&r&a%questions%"),
@@ -86,7 +89,7 @@ public enum Messages {
         String output = conf.getString(this.path, this.value);
 
         for(String arg : args.split(";"))
-            output = output.replaceAll(arg.split("-")[0], arg.split("-")[1]);
+            output = output.replace(arg.split("-")[0], arg.split("-")[1]);
 
         return output;
     }
