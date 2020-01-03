@@ -22,7 +22,7 @@
 **[funquiz.questions.reload]**
 
 ## TODO
-- Interactive question adding
-- TextComponent (SpigotAPI for JSON messages) -> interactive messages
-- Updater
-- Translation
+- Playing sounds on question asked/answered/ended
+- Interactive question adding (Low Priority)
+- Updater (Low-ish priority)
+- Translation (Low Priority)
