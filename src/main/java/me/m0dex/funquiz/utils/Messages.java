@@ -15,6 +15,7 @@ public enum Messages {
     INVENTORY_BACK("&c&lBack"),
     INVENTORY_EXIT("&c&lExit"),
     INVENTORY_QUESTION_LIST("&2&lQuestion List"),
+    INVENTORY_RELOAD("&2&lReload plugin"),
     INVENTORY_ASK_RANDOM("&2&lAsk a random question"),
     INVENTORY_QUESTION_NAME("&6&l%name%"),
     INVENTORY_QUESTION_QUESTION("&2&lQuestion: &e%question%"),
@@ -50,7 +51,8 @@ public enum Messages {
     ANSWERED_TOO_LATE("&3&lFunQuiz &e&l» &c&lYou answered too late!"),
     ALREADY_ANSWERED("&3&lFunQuiz &e&l» &c&lYou've already answered!"),
     ANSWERED_CORRECTLY("&3&lFunQuiz &e&l» &a&lYou answered correctly!"),
-    REWARD_GIVE("&3&lFunQuiz &e&l» You received &c&l%amount% &e&lof &c&l%item%&e&l!");
+    REWARD_GIVE("&3&lFunQuiz &e&l» You received &c&l%amount% &e&lof &c&l%item%&e&l!"),
+    REWARD_MONEY("&3&lFunQuiz &e&l» You received &c&l%amount% &e&las a reward!");
 
 
     private String path;

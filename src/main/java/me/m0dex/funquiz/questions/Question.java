@@ -59,22 +59,26 @@ public class Question {
         if(!answers.contains(answ)) {
 
             Common.tell(player, Messages.WRONG_ANSWER);
+            Common.playSound(player, instance.getSettings().soundAnsweredWrong);
             return;
 
         } else if(playersAnswered.size() >= instance.getSettings().answersAccepted) {
 
             Common.tell(player, Messages.ANSWERED_TOO_LATE);
+            Common.playSound(player, instance.getSettings().soundAnsweredWrong);
             return;
 
         } else if(playersAnswered.contains(player.getUniqueId())) {
 
             Common.tell(player, Messages.ALREADY_ANSWERED);
+            Common.playSound(player, instance.getSettings().soundAnsweredWrong);
             return;
 
         }
 
         playersAnswered.add(player.getUniqueId());
         Common.tell(player, Messages.ANSWERED_CORRECTLY);
+        Common.playSound(player, instance.getSettings().soundAnsweredRight);
 
         if(playersAnswered.size() >= instance.getSettings().answersAccepted)
             this.end();
@@ -85,6 +89,7 @@ public class Question {
      */
     public void run() {
         Common.broadcast(Messages.QUESTION.getMessage("%question%-" + question ));
+        Common.playSoundServer(instance.getSettings().soundAsked);
         instance.getQuestionManager().setActiveQuestion(this);
         timerTaskID = instance.getTaskManager().addTask(new BukkitRunnable() {
             @Override
@@ -101,6 +106,7 @@ public class Question {
         instance.getTaskManager().stopTask(timerTaskID);
         instance.getQuestionManager().setActiveQuestion(null);
         Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers.get(0)));
+        Common.playSoundServer(instance.getSettings().soundEnded);
         sendRewards();
         playersAnswered.clear();
     }

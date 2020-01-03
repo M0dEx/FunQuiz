@@ -5,6 +5,7 @@ import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -72,6 +73,32 @@ public class Common {
 			if(colourizedMsg[i] != "")
 				Bukkit.broadcastMessage(colourizedMsg[i]);
 		
+	}
+
+	/**
+	 * Plays a sound for one player
+	 *
+	 * @param player
+	 * @param sound
+	 */
+	public static void playSound(Player player, Sound sound) {
+
+		player.playSound(player.getLocation(), sound, 1.0f, 1.0f);
+	}
+
+	/**
+	 * Plays a sound for all players on the server
+	 *
+	 * @param sound
+	 */
+	public static void playSoundServer(Sound sound) {
+
+		if (sound == null)
+			return;
+
+		for (Player player : instance.getServer().getOnlinePlayers()) {
+			playSound(player, sound);
+		}
 	}
 
 	/**
@@ -248,9 +275,6 @@ public class Common {
 
 		String[] args = reward.trim().split(" ");
 
-		if(args.length != 3)
-			return;
-
 		if(args[0].equals("give")) {
 			Material material = Material.matchMaterial(args[1]);
 			int amount = tryParseInt(args[2]);
@@ -261,6 +285,21 @@ public class Common {
 			ItemStack item = new ItemStack(material, amount);
 			give(player, item);
 			tell(player, Messages.REWARD_GIVE.getMessage("%item%-" + WordUtils.capitalizeFully(material.toString().toLowerCase().replace("_", " ")) + ";%amount%-" + amount));
+		} else if (args[0].equals("money")){
+
+			if (instance.getEconomy() == null) {
+				instance.getLogger().severe("Couldn't execute reward '" + reward + "' - Not hooked into Vault economy!");
+				return;
+			}
+
+			int amount = tryParseInt(args[1]);
+
+			if (amount >= 0)
+				instance.getEconomy().depositPlayer(player, amount);
+			else
+				instance.getEconomy().withdrawPlayer(player, amount*(-1));
+
+			tell(player, Messages.REWARD_MONEY.getMessage("%amount%-" + amount));
 		}
 	}
 }

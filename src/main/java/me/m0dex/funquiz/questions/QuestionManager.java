@@ -55,7 +55,9 @@ public class QuestionManager {
     public void reload() {
 
         enabled = false;
-        instance.getTaskManager().stopTask(triviaTaskID);
+
+        if (instance.getSettings().otdbEnabled)
+            instance.getTaskManager().stopTask(triviaTaskID);
 
         questions = new ArrayList<>();
         otdbQuestions = new ArrayList<>();

@@ -3,17 +3,10 @@ package me.m0dex.funquiz.inventories;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
-import me.m0dex.funquiz.FunQuiz;
-import me.m0dex.funquiz.questions.Question;
-import me.m0dex.funquiz.utils.Common;
 import me.m0dex.funquiz.utils.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class MainMenuInventory implements InventoryProvider {
 
@@ -21,7 +14,7 @@ public class MainMenuInventory implements InventoryProvider {
     public void init(Player player, InventoryContents contents) {
 
         //Borders
-        contents.fillBorders(ClickableItem.empty(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short)15)));
+        contents.fillBorders(ClickableItem.empty(Inventories.createItem(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short)15), " ")));
 
         //Exit button
         contents.set(2, 8, ClickableItem.of(
@@ -31,9 +24,15 @@ public class MainMenuInventory implements InventoryProvider {
         //Question list button
         contents.set(1, 4, ClickableItem.of(
                 Inventories.createItem(new ItemStack(Material.SAPLING, 1), Messages.INVENTORY_QUESTION_LIST.getMessage()),
+                e -> Inventories.QuestionList.open(player)));
+
+        contents.set(1, 7, ClickableItem.of(
+                Inventories.createItem(new ItemStack(Material.BLAZE_ROD, 1), Messages.INVENTORY_RELOAD.getMessage()),
                 e -> {
-                    Inventories.QuestionList.open(player);
-                }));
+                    player.performCommand("funquiz reload");
+                    player.closeInventory();
+                }
+        ));
     }
 
     @Override

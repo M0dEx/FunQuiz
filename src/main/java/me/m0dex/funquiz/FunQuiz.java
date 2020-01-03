@@ -9,8 +9,10 @@ import me.m0dex.funquiz.commands.QuestionsCommand;
 import me.m0dex.funquiz.listeners.ChatListener;
 import me.m0dex.funquiz.questions.QuestionManager;
 import me.m0dex.funquiz.utils.*;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -33,6 +35,8 @@ public class FunQuiz extends JavaPlugin {
 
     private Metrics metrics;
 
+    private Economy econ;
+
     private static FunQuiz instance;
 
     /**
@@ -44,6 +48,10 @@ public class FunQuiz extends JavaPlugin {
 
         log = this.getLogger();
         cmdExec = new CommandExecutor(this);
+
+        if(!hookEconomy()) {
+            log.warning("Couldn't hook into Vault. Rewards with the keyword 'money' in them will not work!");
+        }
 
         if(!loadConfigs()) {
             log.severe("Something went wrong while loading the config files!");
@@ -72,12 +80,42 @@ public class FunQuiz extends JavaPlugin {
         HandlerList.unregisterAll(this);
     }
 
+    /**
+     * Reloads everything that should be reloaded
+     */
     public void reload() {
 
-        //TODO: Proper reload
+        taskManager.stopTasks();
 
-        onEnable();
-        onDisable();
+        reloadConfig();
+        settings = new Settings(this, this.getConfig());
+
+        loadMessages();
+
+        questionsCfg.reloadConfig();
+        messagesCfg.reloadConfig();
+
+        questionManager.reload();
+
+        registerListeners();
+    }
+
+    /**
+     * Hooks into Vault for economy
+     * @return  <code>Economy econ</code> if Vault is a plugin on the server
+     *          <code>null</code> if there is not.
+     */
+    private boolean hookEconomy() {
+
+        if (getServer().getPluginManager().getPlugin("Vault") == null)
+            return false;
+
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null)
+            return false;
+
+        econ = rsp.getProvider();
+        return econ != null;
     }
 
     /**
@@ -94,6 +132,16 @@ public class FunQuiz extends JavaPlugin {
 
         settings = new Settings(this, this.getConfig());
 
+        loadMessages();
+
+        return success;
+    }
+
+    /**
+     * Loads the configuration with messages
+     */
+    private void loadMessages() {
+
         Messages.setFile(this.messagesCfg.getConfig());
         Messages[] arrayOfMessages;
         int j = (arrayOfMessages = Messages.values()).length;
@@ -104,8 +152,6 @@ public class FunQuiz extends JavaPlugin {
         }
         this.messagesCfg.getConfig().options().copyDefaults(true);
         this.messagesCfg.saveConfig();
-
-        return success;
     }
 
     /**
@@ -164,6 +210,7 @@ public class FunQuiz extends JavaPlugin {
 
     public QuestionManager getQuestionManager() { return questionManager; }
     public InventoryManager getInventoryManager() { return inventoryManager; }
+    public Economy getEconomy() { return econ; }
 
     /**
      * Gets the reference of the current instance of the plugin.

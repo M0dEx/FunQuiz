@@ -2,7 +2,6 @@ package me.m0dex.funquiz.commands;
 
 import me.m0dex.funquiz.FunQuiz;
 import me.m0dex.funquiz.inventories.Inventories;
-import me.m0dex.funquiz.inventories.MainMenuInventory;
 import me.m0dex.funquiz.utils.Common;
 import me.m0dex.funquiz.utils.Messages;
 import org.bukkit.command.CommandSender;
@@ -32,7 +31,7 @@ public class FunQuizCommand extends CommandModule {
 
     private void menu(CommandSender sender) {
 
-        if(!Common.hasPermission(sender, "funquiz.menu.main"))
+        if(!Common.hasPermission(sender, "funquiz.menu"))
             return;
 
         if(sender instanceof Player)
@@ -52,6 +51,7 @@ public class FunQuizCommand extends CommandModule {
 
     @Override
     public void help(CommandSender sender) {
-
+        if(!Common.hasPermission(sender, "funquiz.help"))
+            return;
     }
 }

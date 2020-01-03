@@ -3,6 +3,11 @@ questions:
     answers-accepted: 1
     timeout: 10
     interval: 30
+    sounds:
+        asked: NONE
+        answered-right: NONE
+        answered-wrong: NONE
+        ended: NONE
 
 open-trivia-db:
     enabled: false
