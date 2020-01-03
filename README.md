@@ -8,13 +8,13 @@
 
 ## Commands
 ### Main commands
-- **/funquiz** -> Will show a help dialogue  
+- **/fq** -> Will show a help dialogue  
 **[funquiz.help]**
 
-- **/funquiz menu** -> Shows a menu of the plugin  
+- **/fq menu** -> Shows a menu of the plugin  
 **[funquiz.menu]**
 
-- **/funquiz reload** -> Reloads the plugin  
+- **/fq reload** -> Reloads the plugin  
 **[funquiz.reload]**
 ### Questions
 - **/questions** -> Shows this help dialogue  
