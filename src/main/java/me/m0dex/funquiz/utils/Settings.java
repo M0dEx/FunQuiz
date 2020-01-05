@@ -4,6 +4,7 @@ import me.m0dex.funquiz.FunQuiz;
 import org.bukkit.Sound;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Settings {
@@ -32,9 +33,21 @@ public class Settings {
     public List<String> defaultRewards;
 
     /*
+        DATABASE
+    */
+    public boolean useSQLite;
+    public String hostname;
+    public int port;
+    public String database;
+    public String username;
+    public String password;
+
+    /*
         MISCELLANEOUS
      */
     public String answerPrefix;
+    public List<String> disabledWorlds;
+    public boolean debug;
 
     public Settings(FunQuiz _instance, FileConfiguration _config) {
 
@@ -83,6 +96,19 @@ public class Settings {
         otdbEnabled = config.getBoolean("open-trivia-db.enabled", false);
         defaultRewards = config.getStringList("open-trivia-db.default-rewards");
 
+        useSQLite = config.getBoolean("database.use-sqlite", false);
+        hostname = config.getString("database.hostname", "localhost");
+        port = config.getInt("database.port", 3306);
+        database = config.getString("database.database", "default");
+        username = config.getString("database.username", "root");
+        password = config.getString("database.password", "password");
+
         answerPrefix = config.getString("misc.answer-prefix", "?");
+
+        disabledWorlds = config.getStringList("misc.disabled-worlds");
+        if(disabledWorlds == null)
+            disabledWorlds = new ArrayList<>();
+
+        debug = config.getBoolean("misc.debug", false);
     }
 }

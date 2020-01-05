@@ -60,6 +60,7 @@ public class Question {
 
             Common.tell(player, Messages.WRONG_ANSWER);
             Common.playSound(player, instance.getSettings().soundAnsweredWrong);
+            instance.getPlayerCache().getPlayerData(player.getUniqueId()).addAnsWrong();
             return;
 
         } else if(playersAnswered.size() >= instance.getSettings().answersAccepted) {
@@ -79,6 +80,7 @@ public class Question {
         playersAnswered.add(player.getUniqueId());
         Common.tell(player, Messages.ANSWERED_CORRECTLY);
         Common.playSound(player, instance.getSettings().soundAnsweredRight);
+        instance.getPlayerCache().getPlayerData(player.getUniqueId()).addAnsRight();
 
         if(playersAnswered.size() >= instance.getSettings().answersAccepted)
             this.end();
@@ -88,8 +90,8 @@ public class Question {
      * Sends the question into the chat and starts the timer task to end the question
      */
     public void run() {
-        Common.broadcast(Messages.QUESTION.getMessage("%question%-" + question ));
-        Common.playSoundServer(instance.getSettings().soundAsked);
+        Common.broadcast(Messages.QUESTION.getMessage("%question%-" + question ), instance.getSettings().disabledWorlds);
+        Common.broadcastSound(instance.getSettings().soundAsked, instance.getSettings().disabledWorlds);
         instance.getQuestionManager().setActiveQuestion(this);
         timerTaskID = instance.getTaskManager().addTask(new BukkitRunnable() {
             @Override
@@ -105,8 +107,8 @@ public class Question {
     public void end() {
         instance.getTaskManager().stopTask(timerTaskID);
         instance.getQuestionManager().setActiveQuestion(null);
-        Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers.get(0)));
-        Common.playSoundServer(instance.getSettings().soundEnded);
+        Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers.get(0)), instance.getSettings().disabledWorlds);
+        Common.broadcastSound(instance.getSettings().soundEnded, instance.getSettings().disabledWorlds);
         sendRewards();
         playersAnswered.clear();
     }

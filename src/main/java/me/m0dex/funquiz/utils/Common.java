@@ -10,6 +10,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 public class Common {
 
 	static FunQuiz instance = FunQuiz.getInstance();
@@ -61,6 +63,26 @@ public class Common {
 	}
 
 	/**
+	 * Broadcasts a message to all players except for those in specified worlds
+	 *
+	 * @param message
+	 * @param disabledWorlds
+	 */
+	public static void broadcast(String message, List<String> disabledWorlds) {
+
+		message = applyColours(message);
+
+		for(Player player : Bukkit.getOnlinePlayers()) {
+
+			if (!disabledWorlds.contains(player.getWorld().getName().toLowerCase())) {
+				player.sendMessage(message);
+			}
+		}
+
+		instance.getServer().getConsoleSender().sendMessage(message);
+	}
+
+	/**
 	 * Broadcasts multiple messages to all players.
 	 *
 	 * @param message	<code>String[]</code> messages to be broadcasted
@@ -91,13 +113,14 @@ public class Common {
 	 *
 	 * @param sound
 	 */
-	public static void playSoundServer(Sound sound) {
+	public static void broadcastSound(Sound sound, List<String> disabledWorlds) {
 
 		if (sound == null)
 			return;
 
 		for (Player player : instance.getServer().getOnlinePlayers()) {
-			playSound(player, sound);
+			if(!disabledWorlds.contains(player.getWorld().getName().toLowerCase()))
+				playSound(player, sound);
 		}
 	}
 

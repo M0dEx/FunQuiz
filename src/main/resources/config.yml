@@ -14,5 +14,16 @@ open-trivia-db:
     default-rewards:
         - give DIAMOND 1
 
+database:
+    use-sqlite: true
+    hostname: localhost
+    port: 3306
+    database: default
+    username: root
+    password: password
+
 misc:
     answer-prefix: '?'
+    disabled-worlds:
+    #    - your_world_here
+    debug: false

@@ -1,12 +1,18 @@
 package me.m0dex.funquiz;
 
+import co.aikar.taskchain.BukkitTaskChainFactory;
+import co.aikar.taskchain.TaskChain;
+import co.aikar.taskchain.TaskChainFactory;
 import fr.minuskube.inv.InventoryManager;
 import me.m0dex.funquiz.bstats.Metrics;
+import me.m0dex.funquiz.cache.PlayerCache;
 import me.m0dex.funquiz.commands.CommandExecutor;
 import me.m0dex.funquiz.commands.CommandModule;
 import me.m0dex.funquiz.commands.FunQuizCommand;
 import me.m0dex.funquiz.commands.QuestionsCommand;
+import me.m0dex.funquiz.database.Database;
 import me.m0dex.funquiz.listeners.ChatListener;
+import me.m0dex.funquiz.listeners.PlayerListener;
 import me.m0dex.funquiz.questions.QuestionManager;
 import me.m0dex.funquiz.utils.*;
 import net.milkbowl.vault.economy.Economy;
@@ -33,7 +39,12 @@ public class FunQuiz extends JavaPlugin {
 
     private Map<String, CommandModule> commandMap = new HashMap<>();
 
+    private Database database;
+    private boolean databaseReady;
+    private PlayerCache playerCache;
+
     private Metrics metrics;
+    private TaskChainFactory taskFactory;
 
     private Economy econ;
 
@@ -45,6 +56,8 @@ public class FunQuiz extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        taskFactory = BukkitTaskChainFactory.create(this);
 
         log = this.getLogger();
         cmdExec = new CommandExecutor(this);
@@ -61,6 +74,21 @@ public class FunQuiz extends JavaPlugin {
 
         settings = new Settings(this, getConfig());
 
+        playerCache = new PlayerCache(instance);
+
+        if (settings.useSQLite)
+            database = new Database(this);
+        else {
+            database = new Database(this,
+                    settings.hostname,
+                    settings.port,
+                    settings.database,
+                    settings.username,
+                    settings.password);
+        }
+
+        initDatabase();
+
         taskManager = new TaskManager(this);
         questionManager = new QuestionManager(this, questionsCfg);
         inventoryManager = new InventoryManager(this);
@@ -76,6 +104,8 @@ public class FunQuiz extends JavaPlugin {
      */
     @Override
     public void onDisable() {
+
+        saveDatabase();
         taskManager.stopTasks();
         HandlerList.unregisterAll(this);
     }
@@ -168,6 +198,7 @@ public class FunQuiz extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
 
         pm.registerEvents(new ChatListener(this), this);
+        pm.registerEvents(new PlayerListener(this), this);
     }
 
     /**
@@ -178,6 +209,36 @@ public class FunQuiz extends JavaPlugin {
         metrics = new Metrics(this);
 
         metrics.addCustomChart(new Metrics.SimplePie("open_trivia_db", () -> (instance.getSettings().otdbEnabled ? "Enabled" : "Disabled")));
+    }
+
+    private void initDatabase() {
+
+        TaskChain<?> dbInitChain = taskFactory.newChain();
+        dbInitChain
+                .async(() -> {
+                    database.openConnection(settings.useSQLite);
+                })
+                .sync(() -> {
+                    databaseReady = true;
+                })
+                .execute();
+    }
+
+    private void saveDatabase() {
+
+        playerCache.savePlayerData();
+
+        TaskChain<?> dbSaveChain = taskFactory.newChain();
+        dbSaveChain
+                .sync(() -> {
+                    databaseReady = false;
+                })
+                .async(() -> {
+                    instance.getLogger().info("Saving database...");
+                    instance.getPlayerCache().savePlayerData();
+                    database.closeConnection();
+                })
+                .execute();
     }
 
     /**
@@ -191,6 +252,8 @@ public class FunQuiz extends JavaPlugin {
         commandMap.put(command.toLowerCase(), module);
         this.getCommand(command).setExecutor(this.cmdExec);
     }
+
+    public boolean isDatabaseReady() { return databaseReady; }
 
     /**
      * Gets the command specified.
@@ -210,6 +273,9 @@ public class FunQuiz extends JavaPlugin {
 
     public QuestionManager getQuestionManager() { return questionManager; }
     public InventoryManager getInventoryManager() { return inventoryManager; }
+    public TaskChainFactory getTaskFactory() { return taskFactory; }
+    public Database getDB() { return database; }
+    public PlayerCache getPlayerCache() { return playerCache; }
     public Economy getEconomy() { return econ; }
 
     /**

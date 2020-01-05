@@ -8,6 +8,7 @@ public enum Messages {
     NO_PERMISSION("&3&lFunQuiz &e&l» &c&lYou do not have the permission to do this!"),
     NOT_A_CONSOLE_COMMAND("&3&lFunQuiz &e&l» &c&lThis is not a console command."),
     RELOADED("&3&lFunQuiz &e&l» &a&lThe plugin was reloaded!"),
+    UNKNOWN_PLAYER("&3&lFunQuiz &e&l» &c&lUnknown player!"),
 
     // Inventories
     INVENTORY_MAIN_MENU_TITLE("&3&lMain Menu"),
@@ -23,6 +24,12 @@ public enum Messages {
     INVENTORY_QUESTION_REWARDS("&2&lRewards: &e%rewards%"),
     INVENTORY_PREVIOUS("&e&lPrevious page"),
     INVENTORY_NEXT("&e&lNext page"),
+
+    // FunQuiz command
+    FUNQUIZ_STATS("&3&lStatistics for player %player%&e&l:" +
+            "\n&e&lAnswered &a&lcorrectly&e&l: %correct%" +
+            "\n&e&lAnswered &c&lincorrectly&e&l: %incorrect%" +
+            "\n&e&lRatio&e&l: %ratio%"),
 
     // Question command
     QUESTIONS_LIST("&3&lList of available questions&e&l:\n&r&a%questions%"),

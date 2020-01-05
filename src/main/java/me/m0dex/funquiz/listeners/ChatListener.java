@@ -28,6 +28,9 @@ public class ChatListener implements Listener {
         String message = Common.stripColours(e.getMessage()).toLowerCase();
         Question question = qm.getActiveQuestion();
 
+        if(instance.getSettings().disabledWorlds.contains(player.getWorld().getName().toLowerCase()))
+            return;
+
         if(question == null)
             return;
 

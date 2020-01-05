@@ -78,8 +78,10 @@ public class QuestionListInventory implements InventoryProvider {
 
             item.setItemMeta(meta);
 
-            questionItems[i] = ClickableItem.of(item,
-                    e -> player.performCommand("questions ask " + question.getName()));
+            questionItems[i] = ClickableItem.of(item, e -> {
+                player.performCommand("questions ask " + question.getName());
+                player.closeInventory();
+            });
         }
 
         pagination.setItems(questionItems);
