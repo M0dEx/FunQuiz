@@ -17,7 +17,7 @@
 - **/fq reload** -> Reloads the plugin  
 **[funquiz.reload]**
 
-- **/fq update** -> Updates the plugin
+- **/fq update** -> Updates the plugin  
 **[funquiz.update]**
 ### Questions
 - **/questions** -> Shows this help dialogue  
