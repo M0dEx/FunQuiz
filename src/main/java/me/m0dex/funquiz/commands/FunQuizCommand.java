@@ -10,8 +10,6 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.UUID;
-
 public class FunQuizCommand extends CommandModule {
 
     public FunQuizCommand(FunQuiz _instance) {
@@ -30,6 +28,9 @@ public class FunQuizCommand extends CommandModule {
                 break;
             case "stats":
                 stats(sender, args);
+                break;
+            case "update":
+                update(sender, args);
                 break;
             default:
                 help(sender);
@@ -122,6 +123,25 @@ public class FunQuizCommand extends CommandModule {
                 Common.tell(sender, Messages.FUNQUIZ_STATS.getMessage("%player%-" + player.getDisplayName() + ";%correct%-" + correct + ";%incorrect%-" + incorrect + ";%ratio%-" + data.getRatio()));
             }
         }
+    }
+
+    public void update(CommandSender sender, CommandContext args) {
+
+        if (!Common.hasPermission(sender, "funquiz.update"))
+            return;
+
+        TaskChain<?> chain = instance.getTaskFactory().newChain();
+        chain
+                .async(() -> {
+                    chain.setTaskData("success", instance.update());
+                })
+                .sync(() -> {
+                    if(chain.getTaskData("success"))
+                        Common.tell(sender, Messages.UPDATE_SUCCESSFUL);
+                    else
+                        Common.tell(sender, Messages.UPDATE_UNSUCCESSFUL);
+                })
+                .execute();
     }
 
     @Override

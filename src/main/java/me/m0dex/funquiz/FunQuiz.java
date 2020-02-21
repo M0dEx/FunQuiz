@@ -14,6 +14,7 @@ import me.m0dex.funquiz.database.Database;
 import me.m0dex.funquiz.listeners.ChatListener;
 import me.m0dex.funquiz.listeners.PlayerListener;
 import me.m0dex.funquiz.questions.QuestionManager;
+import me.m0dex.funquiz.updater.Updater;
 import me.m0dex.funquiz.utils.*;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.event.HandlerList;
@@ -45,6 +46,7 @@ public class FunQuiz extends JavaPlugin {
 
     private Metrics metrics;
     private TaskChainFactory taskFactory;
+    private Updater updater;
 
     private Economy econ;
 
@@ -232,13 +234,33 @@ public class FunQuiz extends JavaPlugin {
         dbSaveChain
                 .sync(() -> {
                     databaseReady = false;
+                    instance.getLogger().info("Saving database...");
                 })
                 .async(() -> {
-                    instance.getLogger().info("Saving database...");
                     instance.getPlayerCache().savePlayerData();
                     database.closeConnection();
                 })
                 .execute();
+    }
+
+    private void initUpdater() {
+
+        updater = new Updater(this);
+
+        TaskChain<?> chain = taskFactory.newChain();
+        chain
+                .async(() -> {
+                    updater.checkForUpdate();
+                })
+                .execute();
+    }
+
+    public boolean update() {
+
+        if (!updater.isUpdateAvailable())
+            return false;
+
+        return updater.update();
     }
 
     /**

@@ -30,6 +30,8 @@ public enum Messages {
             "\n&e&lAnswered &a&lcorrectly&e&l: %correct%" +
             "\n&e&lAnswered &c&lincorrectly&e&l: %incorrect%" +
             "\n&e&lRatio&e&l: %ratio%"),
+    UPDATE_SUCCESSFUL("&3&lFunQuiz &e&l» &a&lThe plugin was successfully updated!"),
+    UPDATE_UNSUCCESSFUL("&3&lFunQuiz &e&l» &c&lCouldn't update the plugin. See the console for more information!"),
 
     // Question command
     QUESTIONS_LIST("&3&lList of available questions&e&l:\n&r&a%questions%"),
