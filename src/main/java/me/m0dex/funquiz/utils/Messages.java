@@ -32,12 +32,22 @@ public enum Messages {
             "\n&e&lRatio&e&l: %ratio%"),
     UPDATE_SUCCESSFUL("&3&lFunQuiz &e&l» &a&lThe plugin was successfully updated!"),
     UPDATE_UNSUCCESSFUL("&3&lFunQuiz &e&l» &c&lCouldn't update the plugin. See the console for more information!"),
+    FUNQUIZ_HELP("&e&l--------------- &3&lFunQuiz Help&e&l ---------------" +
+            "\n&2/funquiz menu &e» &bShows the admin inventory menu" +
+            "\n " +
+            "\n&2/funquiz stats [name] &e» &bDisplays the statistics for the specified player or the command sender" +
+            "\n " +
+            "\n&2/funquiz update &e» &bRuns the updater" +
+            "\n " +
+            "\n&2/funquiz reload &e» &bReloads the whole plugin" +
+            "\n "),
 
     // Question command
     QUESTIONS_LIST("&3&lList of available questions&e&l:\n&r&a%questions%"),
     QUESTIONS_INVALID("&3&lFunQuiz &e&l» &c&lUnknown question:&c&l %name%"),
     QUESTIONS_ALREADY_ACTIVE("&3&lFunQuiz &e&l» &c&lThere's already an active question."),
     QUESTIONS_ASKED("&3&lFunQuiz &e&l» Question asked!"),
+    QUESTIONS_RELOAD("&3&lFunQuiz &e&l» Questions and OTDB were successfully reloaded!"),
     QUESTIONS_INFO("&3&lQuestion %name%&e&l:" +
             "\n&2&lQuestion: &e%question%" +
             "\n&2&lAnswers: &e%answers%" +
@@ -56,6 +66,9 @@ public enum Messages {
     QUESTION("&3&lQuestion &e&l» &a&l%question%"),
     NOT_ENOUGH_PLAYERS("&3&lFunQuiz &e&l» &c&lThere is not enough players for FunQuiz to ask questions!"),
     QUESTION_END("&3&lFunQuiz &e&l» The time to answer the question ran out! The correct answer was: &b&l%answer%&e&l."),
+    QUESTION_END_NO_ASNWER("&3&lFunQuiz &e&l» The time to answer the question ran out!"),
+    QUESTION_END_STATS("&e&lCorrect answers: &a&l%correct%" +
+            "\n&e&lIncorrect answers: &c&l%incorrect%"),
     WRONG_ANSWER("&3&lFunQuiz &e&l» &c&lWrong answer!"),
     ANSWERED_TOO_LATE("&3&lFunQuiz &e&l» &c&lYou answered too late!"),
     ALREADY_ANSWERED("&3&lFunQuiz &e&l» &c&lYou've already answered!"),

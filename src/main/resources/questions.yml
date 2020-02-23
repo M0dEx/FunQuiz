@@ -1,6 +1,7 @@
 questions:
     lexicon:
         question: What is another word for lexicon?
+        hide-answer: false
         answers:
             - dictionary
             - dict
@@ -8,24 +9,28 @@ questions:
             - give GOLD_INGOT 5
     uranus:
         question: What is the name of the seventh planet from the sun?
+        hide-answer: false
         answers:
             - Uranus
         rewards:
             - give DIAMOND 1
     amazon:
         question: What is the world's longest river?
+        hide-answer: false
         answers:
             - Amazon
         rewards:
             - give EMERALD 1
     mojang:
         question: Who founded Mojang?
+        hide-answer: false
         answers:
             - Notch
         rewards:
             - give DIAMOND 2
     first-spaceman:
         question: Who was the first human in space?
+        hide-answer: false
         answers:
             - yuri gagarin
             - gagarin

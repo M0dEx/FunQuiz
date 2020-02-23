@@ -12,3 +12,25 @@ commands:
         description: Question control.
         usage: /questions
         aliases: q
+permissions:
+    funquiz:
+        children:
+            funquiz.*: true
+    funquiz.*:
+        children:
+            funquiz.admin: true
+    funquiz.admin:
+        children:
+            funquiz.menu: true
+            funquiz.reload: true
+            funquiz.stats: true
+            funquiz.update: true
+            funquiz.help: true
+            funquiz.questions: true
+    funquiz.questions:
+        children:
+            funquiz.questions.list: true
+            funquiz.questions.info: true
+            funquiz.questions.ask: true
+            funquiz.questions.reload: true
+            funquiz.questions.help: true

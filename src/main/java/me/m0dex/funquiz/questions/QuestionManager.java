@@ -160,6 +160,7 @@ public class QuestionManager {
 
             String name = key.toUpperCase().replace('-', '_');
             String question = section.getString(key + ".question");
+            boolean hideAnswer = section.getBoolean(key + ".hide-answer", false);
             List<String> answers = section.getStringList(key + ".answers");
             List<String> rewards = section.getStringList(key + ".rewards");
 
@@ -168,7 +169,7 @@ public class QuestionManager {
                 continue;
             }
 
-            questions.add(new Question(name, question, answers, rewards, instance));
+            questions.add(new Question(name, question, hideAnswer, answers, rewards, instance));
         }
 
         if (instance.getSettings().otdbEnabled) {

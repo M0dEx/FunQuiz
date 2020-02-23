@@ -3,6 +3,7 @@ package me.m0dex.funquiz.inventories;
 import fr.minuskube.inv.ClickableItem;
 import fr.minuskube.inv.content.InventoryContents;
 import fr.minuskube.inv.content.InventoryProvider;
+import me.m0dex.funquiz.utils.Common;
 import me.m0dex.funquiz.utils.Messages;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,8 +24,9 @@ public class MainMenuInventory implements InventoryProvider {
 
         //Question list button
         contents.set(1, 4, ClickableItem.of(
-                Inventories.createItem(new ItemStack(Material.SAPLING, 1), Messages.INVENTORY_QUESTION_LIST.getMessage()),
-                e -> Inventories.QuestionList.open(player)));
+                Inventories.createItem(new ItemStack(Material.SAPLING, 1), Messages.INVENTORY_QUESTION_LIST.getMessage()), e -> {
+                    Inventories.QuestionList.open(player);
+                }));
 
         contents.set(1, 7, ClickableItem.of(
                 Inventories.createItem(new ItemStack(Material.BLAZE_ROD, 1), Messages.INVENTORY_RELOAD.getMessage()),

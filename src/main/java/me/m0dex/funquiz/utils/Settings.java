@@ -20,6 +20,7 @@ public class Settings {
     public int answersAccepted;
     public int timeout;
     public int interval;
+    public boolean hideAnswer;
 
     public Sound soundAsked;
     public Sound soundAnsweredRight;

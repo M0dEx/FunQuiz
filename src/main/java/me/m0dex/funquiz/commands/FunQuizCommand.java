@@ -149,6 +149,6 @@ public class FunQuizCommand extends CommandModule {
         if(!Common.hasPermission(sender, "funquiz.help"))
             return;
 
-        //TODO: Help
+        Common.tell(sender, Messages.FUNQUIZ_HELP);
     }
 }

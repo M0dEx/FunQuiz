@@ -8,17 +8,22 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 import java.util.UUID;
 
 public class Question {
 
     String name;
     String question;
+    boolean hideAnswer;
     List<String> answers;
     List<String> rewards;
 
     List<UUID> playersAnswered;
     int timerTaskID;
+
+    int answeredRight;
+    int answeredWrong;
 
     FunQuiz instance;
 
@@ -26,16 +31,18 @@ public class Question {
      * Initializes the question object
      * @param _name A <b>unique</b> name which the question can be identified with
      * @param _question The question itself
+     * @param _hideAnswer Boolean specifying whether the answer should be revealed at the end of the question
      * @param _answers List of answers (<code>String</code>)
      * @param _rewards List of rewards (<code>String</code>)
      * @param _instance Instance of the plugin
      */
-    public Question(String _name, String _question, List<String> _answers, List<String> _rewards, FunQuiz _instance) {
+    public Question(String _name, String _question, boolean _hideAnswer, List<String> _answers, List<String> _rewards, FunQuiz _instance) {
 
         instance = _instance;
 
         name = _name.toUpperCase();
         question = Common.applyColours(_question);
+        hideAnswer = _hideAnswer;
         answers = new ArrayList<>();
         rewards = new ArrayList<>();
 
@@ -47,6 +54,22 @@ public class Question {
         }
 
         playersAnswered = new ArrayList<>();
+
+        answeredRight = 0;
+        answeredWrong = 0;
+    }
+
+    /**
+     * Initializes the question object
+     * @param _name A <b>unique</b> name which the question can be identified with
+     * @param _question The question itself
+     * @param _answers List of answers (<code>String</code>)
+     * @param _rewards List of rewards (<code>String</code>)
+     * @param _instance Instance of the plugin
+     */
+    public Question(String _name, String _question, List<String> _answers, List<String> _rewards, FunQuiz _instance) {
+
+        this(_name, _question, _instance.getSettings().hideAnswer, _answers, _rewards, _instance);
     }
 
     /**
@@ -61,6 +84,7 @@ public class Question {
             Common.tell(player, Messages.WRONG_ANSWER);
             Common.playSound(player, instance.getSettings().soundAnsweredWrong);
             instance.getPlayerCache().getPlayerData(player.getUniqueId()).addAnsWrong();
+            answeredWrong++;
             return;
 
         } else if(playersAnswered.size() >= instance.getSettings().answersAccepted) {
@@ -81,6 +105,7 @@ public class Question {
         Common.tell(player, Messages.ANSWERED_CORRECTLY);
         Common.playSound(player, instance.getSettings().soundAnsweredRight);
         instance.getPlayerCache().getPlayerData(player.getUniqueId()).addAnsRight();
+        answeredRight++;
 
         if(playersAnswered.size() >= instance.getSettings().answersAccepted)
             this.end();
@@ -107,10 +132,20 @@ public class Question {
     public void end() {
         instance.getTaskManager().stopTask(timerTaskID);
         instance.getQuestionManager().setActiveQuestion(null);
-        Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers.get(0)), instance.getSettings().disabledWorlds);
+
+        if(this.hideAnswer)
+            Common.broadcast(Messages.QUESTION_END_NO_ASNWER.getMessage(), instance.getSettings().disabledWorlds);
+        else
+            Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers.get(0)), instance.getSettings().disabledWorlds);
+
+        Common.broadcast(Messages.QUESTION_END_STATS.getMessage("%correct%-" + answeredRight + ";%incorrect%-" + answeredWrong));
+
         Common.broadcastSound(instance.getSettings().soundEnded, instance.getSettings().disabledWorlds);
+
         sendRewards();
         playersAnswered.clear();
+        answeredRight = 0;
+        answeredWrong = 0;
     }
 
     /**

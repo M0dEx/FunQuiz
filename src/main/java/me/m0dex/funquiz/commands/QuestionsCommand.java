@@ -104,6 +104,7 @@ public class QuestionsCommand extends CommandModule {
             return;
 
         instance.getQuestionManager().reload();
+        Common.tell(sender, Messages.QUESTIONS_RELOAD);
     }
 
     @Override
