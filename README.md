@@ -16,6 +16,9 @@
 
 - **/fq reload** -> Reloads the plugin  
 **[funquiz.reload]**
+
+- **/fq update** -> Updates the plugin  
+**[funquiz.update]**
 ### Questions
 - **/questions** -> Shows this help dialogue  
 **[funquiz.questions.help]**
@@ -34,5 +37,4 @@
 
 ## TODO
 - Interactive question adding (Low Priority)
-- Updater (Low-ish priority)
 - Translation (Low Priority)
