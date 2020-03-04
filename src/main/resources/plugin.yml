@@ -1,5 +1,5 @@
 name: FunQuiz
-version: 2.0.0
+version: 2.1.1
 main: me.m0dex.funquiz.FunQuiz
 author: M0dEx
 softdepend: [Vault]

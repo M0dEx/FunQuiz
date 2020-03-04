@@ -54,8 +54,8 @@ public class FunQuizCommand extends CommandModule {
         if(!Common.hasPermission(sender, "funquiz.reload"))
             return;
 
-        Common.tell(sender, Messages.RELOADED);
         instance.reload();
+        Common.tell(sender, Messages.RELOADED);
     }
 
     @SuppressWarnings("deprecation")

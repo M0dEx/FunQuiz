@@ -99,6 +99,8 @@ public class FunQuiz extends JavaPlugin {
         registerCommands();
         registerListeners();
         initializeMetrics();
+
+        initUpdater();
     }
 
     /**
@@ -122,10 +124,9 @@ public class FunQuiz extends JavaPlugin {
         reloadConfig();
         settings = new Settings(this, this.getConfig());
 
-        loadMessages();
-
         questionsCfg.reloadConfig();
         messagesCfg.reloadConfig();
+        loadMessages();
 
         questionManager.reload();
 
