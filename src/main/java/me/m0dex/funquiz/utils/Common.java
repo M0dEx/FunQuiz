@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Common {
 
@@ -302,7 +303,7 @@ public class Common {
 		String[] args = reward.trim().split(" ");
 
 		if(args[0].equalsIgnoreCase("give")) {
-			Material material = Material.matchMaterial(args[1]);
+			Material material = Material.matchMaterial(args[1].toLowerCase());
 			int amount = tryParseInt(args[2]);
 
 			if(material == null || amount == 0)
@@ -331,6 +332,9 @@ public class Common {
 			ConsoleCommandSender console = instance.getServer().getConsoleSender();
 
 			String command = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replace("%player%", player.getName());
+
+			if (instance.getSettings().debug)
+				instance.getLogger().info("Executing custom reward command \"" + command + "\" for player " + player.getName());
 
 			instance.getServer().dispatchCommand(console, command);
 		}

@@ -43,15 +43,13 @@ public class Question {
         name = _name.toUpperCase();
         question = Common.applyColours(_question);
         hideAnswer = _hideAnswer;
+
         answers = new ArrayList<>();
-        rewards = new ArrayList<>();
 
         for(String ans : _answers)
             answers.add(ans.toLowerCase());
 
-        for(String rew : _rewards) {
-            rewards.add(rew.toLowerCase());
-        }
+        rewards = _rewards;
 
         playersAnswered = new ArrayList<>();
 
@@ -107,8 +105,16 @@ public class Question {
         instance.getPlayerCache().getPlayerData(player.getUniqueId()).addAnsRight();
         answeredRight++;
 
-        if(playersAnswered.size() >= instance.getSettings().answersAccepted)
-            this.end();
+        if(playersAnswered.size() >= instance.getSettings().answersAccepted) {
+
+            // Ends the question, but in sync with the game thread
+            instance.getTaskManager().addTask(new BukkitRunnable() {
+                @Override
+                public void run() {
+                    end();
+                }
+            }.runTaskLater(instance, 5));
+        }
     }
 
     /**
