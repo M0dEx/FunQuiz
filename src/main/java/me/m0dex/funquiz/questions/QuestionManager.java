@@ -3,9 +3,11 @@ package me.m0dex.funquiz.questions;
 import me.m0dex.funquiz.FunQuiz;
 import me.m0dex.funquiz.questions.opentriviadb.OpenTriviaDB;
 import me.m0dex.funquiz.utils.Configuration;
+import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -159,12 +161,12 @@ public class QuestionManager {
         for (String key : section.getKeys(false)) {
 
             String name = key.toUpperCase().replace('-', '_');
-            String question = section.getString(key + ".question");
+            String question = StringEscapeUtils.unescapeJava(section.getString(key + ".question"));
             boolean hideAnswer = section.getBoolean(key + ".hide-answer", false);
             List<String> answers = section.getStringList(key + ".answers");
             List<String> rewards = section.getStringList(key + ".rewards");
 
-            if (question == null || answers == null || rewards == null) {
+            if (question.equals("") || answers == null || rewards == null) {
                 instance.getLogger().severe("Couldn't load question " + name);
                 continue;
             }

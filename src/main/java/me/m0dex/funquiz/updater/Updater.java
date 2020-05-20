@@ -41,7 +41,7 @@ public class Updater {
 			JsonElement element = new JsonParser().parse(reader);
 			if (element.isJsonArray()) {
 				JsonObject versionObject = element.getAsJsonArray().get(0).getAsJsonObject();
-				externalVersion = versionObject.get("name").getAsString();
+				externalVersion = versionObject.get("name").getAsString().replace("v", "");
 				downloadURL = new URL("https://api.spiget.org/v2/resources/44907/download");
 			} else {
 				

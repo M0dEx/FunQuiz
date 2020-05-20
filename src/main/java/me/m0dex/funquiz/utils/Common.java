@@ -7,9 +7,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.List;
 
 public class Common {
@@ -298,7 +301,7 @@ public class Common {
 
 		String[] args = reward.trim().split(" ");
 
-		if(args[0].equals("give")) {
+		if(args[0].equalsIgnoreCase("give")) {
 			Material material = Material.matchMaterial(args[1]);
 			int amount = tryParseInt(args[2]);
 
@@ -308,7 +311,7 @@ public class Common {
 			ItemStack item = new ItemStack(material, amount);
 			give(player, item);
 			tell(player, Messages.REWARD_GIVE.getMessage("%item%-" + WordUtils.capitalizeFully(material.toString().toLowerCase().replace("_", " ")) + ";%amount%-" + amount));
-		} else if (args[0].equals("money")){
+		} else if (args[0].equalsIgnoreCase("money")){
 
 			if (instance.getEconomy() == null) {
 				instance.getLogger().severe("Couldn't execute reward '" + reward + "' - Not hooked into Vault economy!");
@@ -320,9 +323,16 @@ public class Common {
 			if (amount >= 0)
 				instance.getEconomy().depositPlayer(player, amount);
 			else
-				instance.getEconomy().withdrawPlayer(player, amount*(-1));
+				instance.getEconomy().withdrawPlayer(player, amount);
 
 			tell(player, Messages.REWARD_MONEY.getMessage("%amount%-" + amount));
+		} else if (args[0].equalsIgnoreCase("custom")) {
+
+			ConsoleCommandSender console = instance.getServer().getConsoleSender();
+
+			String command = String.join(" ", Arrays.copyOfRange(args, 1, args.length)).replace("%player%", player.getName());
+
+			instance.getServer().dispatchCommand(console, command);
 		}
 	}
 }

@@ -138,7 +138,7 @@ public class Question {
         else
             Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers.get(0)), instance.getSettings().disabledWorlds);
 
-        Common.broadcast(Messages.QUESTION_END_STATS.getMessage("%correct%-" + answeredRight + ";%incorrect%-" + answeredWrong));
+        Common.broadcast(Messages.QUESTION_END_STATS.getMessage("%correct%-" + answeredRight + ";%incorrect%-" + answeredWrong), instance.getSettings().disabledWorlds);
 
         Common.broadcastSound(instance.getSettings().soundEnded, instance.getSettings().disabledWorlds);
 
