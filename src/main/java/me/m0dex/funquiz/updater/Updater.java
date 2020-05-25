@@ -5,12 +5,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import me.m0dex.funquiz.FunQuiz;
 
-import java.io.BufferedInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 
 public class Updater {
 
@@ -19,8 +21,12 @@ public class Updater {
 	private URL downloadURL = null;
 	private boolean updateAvailable;
 
+	private Path updateFolder;
+
 	public Updater(FunQuiz _instance) {
 		instance = _instance;
+
+		updateFolder = Paths.get(instance.getServer().getUpdateFolderFile().getPath());
 	}
 
 	public boolean checkForUpdate() {
@@ -81,49 +87,39 @@ public class Updater {
 
 	public boolean update() {
 
-		try {
-
-			BufferedInputStream _in = null;
-			FileOutputStream _fout = null;
-
-			try {
-				
-				if(downloadURL != null) {
-					
-					_in = new BufferedInputStream(downloadURL.openStream());
-					_fout = new FileOutputStream("plugins/FunQuiz.jar");
-
-					byte[] buffer = new byte[1024];
-					int count;
-					while ((count = _in.read(buffer, 0, 1024)) != -1)
-						_fout.write(buffer, 0, count);
-						
-					instance.getLogger().info("[UPDATER]: Successfully updated the plugin!");
-					instance.getLogger().info("[UPDATER]: Restart the server to apply the changes");
-					
-					return true;
-				} else {
-					
-					instance.getLogger().info("[UPDATER]: Download URL invalid");
-					
-					return false;
-				}
-
-			} finally {
-				if (_in != null)
-					_in.close();
-					
-				if (_fout != null)
-					_fout.close();
-			}
-
-		} catch (Exception ex) {
-			instance.getLogger().severe("[UPDATER]: Couldn't download the update - " + ex.getMessage());
+		if(downloadURL == null) {
+			instance.getLogger().info("[UPDATER]: Download URL invalid");
+			return false;
 		}
 
+		try {
+
+			HttpURLConnection conn = (HttpURLConnection) downloadURL.openConnection();
+			conn.addRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36");
+
+			try (InputStream in = conn.getInputStream()) {
+
+				if (!Files.exists(updateFolder))
+					Files.createDirectories(updateFolder);
+
+				Files.copy(in, Paths.get(updateFolder.toString(), "FunQuiz.jar"), StandardCopyOption.REPLACE_EXISTING);
+
+				instance.getLogger().info("[UPDATER]: Update folder: " + instance.getServer().getUpdateFolder());
+				instance.getLogger().info("[UPDATER]: Successfully updated the plugin!");
+				instance.getLogger().info("[UPDATER]: Restart the server to apply the changes");
+
+				return true;
+
+			} catch (Exception ex) {
+				instance.getLogger().severe("[UPDATER]: Couldn't download the update...");
+				ex.printStackTrace();
+			}
+		} catch (Exception ex) {
+			instance.getLogger().severe("[UPDATER]: Couldn't download the update...");
+			ex.printStackTrace();
+		}
 
 		return false;
-
 	}
 
 	public synchronized boolean isUpdateAvailable() {
