@@ -1,30 +1,61 @@
+### Questions configuration ###
 questions:
+
+    ### Sets the minimum amount of players to start asking trivia questions ###
     min-players: 3
+
+    ### Sets the amount of answers a question will accept before it ends ###
     answers-accepted: 1
+
+    ### Sets the timeout for questions (format: "15s") ###
     timeout: 10
+
+    ### Sets the interval in which the questions will be automatically asked (format: "1h 30m 50s"). Setting this to 0 will disable this functionality ###
     interval: 30
+
+    ### Sets whether to hide to show or hide the correct answers at the end of the time limit for the question. ###
     hide-answer: false
+
+    ### Sets the sounds for certain events. For a list of available sounds for your version of Minecraft visist https://helpch.at/docs/<MINECRAFT_VERSION>/index.html?org/bukkit/Sound.html ###
     sounds:
         asked: NONE
         answered-right: NONE
         answered-wrong: NONE
         ended: NONE
 
+### Open Trivia DB configuration ###
 open-trivia-db:
+
+    ### Enables the OTDB subsystem ###
     enabled: false
+
+    ### Sets the default reward for all OTDB questions (use the same reward syntax as in questions.yml) ###
     default-rewards:
         - give DIAMOND 1
 
+### Database configuration (stores user statistics) ###
 database:
+
+    ### When true, sets the database model to SQLite - stored locally on the drive. When False, sets the database model to MYSQL ###
     use-sqlite: true
+
+    ### MYSQL configuration ###
     hostname: localhost
     port: 3306
     database: default
     username: root
     password: password
 
+
+### Miscellaneous configuration ###
 misc:
-    answer-prefix: '?'
+
+    ### Sets the prefix for answering the questions. If set to "", the plugin will only accept correct answers and will ignore the rest (for normal chat function) ###
+    answer-prefix: "?"
+
+    ### A list of worlds where players shouldn't be able to see/answer questions ###
     disabled-worlds:
     #    - your_world_here
+
+    ### Enables additional logging ###
     debug: false

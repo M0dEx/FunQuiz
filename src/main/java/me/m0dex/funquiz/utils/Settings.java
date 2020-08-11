@@ -18,8 +18,8 @@ public class Settings {
      */
     public int minPlayers;
     public int answersAccepted;
-    public int timeout;
-    public int interval;
+    public Time timeout;
+    public Time interval;
     public boolean hideAnswer;
 
     public Sound soundAsked;
@@ -62,8 +62,8 @@ public class Settings {
 
         minPlayers = config.getInt("questions.min-players", 3);
         answersAccepted = config.getInt("questions.answers-accepted", 1);
-        timeout = config.getInt("questions.timeout", 10);
-        interval = config.getInt("questions.interval", 30);
+        timeout = Time.fromTimeString(config.getString("questions.timeout", "10s"));
+        interval = Time.fromTimeString(config.getString("questions.interval", "30m"));
 
         try {
             String soundAskedString = config.getString("questions.sounds.asked", "NONE").toUpperCase().trim();

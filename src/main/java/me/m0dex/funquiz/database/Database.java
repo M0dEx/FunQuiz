@@ -189,9 +189,9 @@ public class Database {
         } catch (SQLException ex) {
             if(instance.getSettings().debug)
                 ex.printStackTrace();
-        } finally {
-            return false;
         }
+
+        return false;
     }
 
     private synchronized Connection getConnection() {

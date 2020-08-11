@@ -130,8 +130,11 @@ public class QuestionManager {
 
     private void registerQuestionTask() {
 
-        if(instance.getSettings().interval <= 0 || instance.getSettings().interval > 10000) {
-            instance.getLogger().info("The interval in config.yml is too low or too high. The task is disabled until you provide a valid interval. (1 - 10000). If you entered 0 to turn the task off, you can ignore this message.");
+        if(instance.getSettings().interval.isZero()) {
+
+            if(instance.getSettings().debug)
+                instance.getLogger().info("Question task not initialized due to interval being set to 0!");
+
             return;
         }
 
@@ -140,7 +143,7 @@ public class QuestionManager {
             public void run() {
                 askQuestion();
             }
-        }.runTaskTimer(instance, 20*60*instance.getSettings().interval, 20*60*instance.getSettings().interval));
+        }.runTaskTimer(instance, instance.getSettings().interval.toTicks(), instance.getSettings().interval.toTicks()));
     }
 
     public void restartQuestionTask() {
@@ -190,7 +193,7 @@ public class QuestionManager {
 
                     enabled = true;
                 }
-            }.runTaskTimerAsynchronously(instance, 0, instance.getSettings().interval * 60 * 25 * 20));
+            }.runTaskTimerAsynchronously(instance, 0, instance.getSettings().interval.toTicks() * 25));
         }
     }
 }

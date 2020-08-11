@@ -74,29 +74,47 @@ public class Question {
      * Checks the answer
      * @param player Player answering the question
      * @param answ Answer
+     *
+     * @return True if the message is to be cancelled, false if not.
      */
-    public void checkAnswer(Player player, String answ) {
+    public boolean checkAnswer(Player player, String answ) {
+
+        boolean prefixSet = !instance.getSettings().answerPrefix.equals("");
 
         if(!answers.contains(answ)) {
 
-            Common.tell(player, Messages.WRONG_ANSWER);
-            Common.playSound(player, instance.getSettings().soundAnsweredWrong);
-            instance.getPlayerCache().getPlayerData(player.getUniqueId()).addAnsWrong();
-            answeredWrong++;
-            return;
+            if(prefixSet) {
+                Common.tell(player, Messages.WRONG_ANSWER);
+                Common.playSound(player, instance.getSettings().soundAnsweredWrong);
+                instance.getPlayerCache().getPlayerData(player.getUniqueId()).addAnsWrong();
+                answeredWrong++;
+
+                return true;
+
+            } else
+                return false;
 
         } else if(playersAnswered.size() >= instance.getSettings().answersAccepted) {
 
-            Common.tell(player, Messages.ANSWERED_TOO_LATE);
-            Common.playSound(player, instance.getSettings().soundAnsweredWrong);
-            return;
+            if(prefixSet) {
+                Common.tell(player, Messages.ANSWERED_TOO_LATE);
+                Common.playSound(player, instance.getSettings().soundAnsweredWrong);
+
+                return true;
+
+            } else
+                return false;
 
         } else if(playersAnswered.contains(player.getUniqueId())) {
 
-            Common.tell(player, Messages.ALREADY_ANSWERED);
-            Common.playSound(player, instance.getSettings().soundAnsweredWrong);
-            return;
+            if(prefixSet) {
+                Common.tell(player, Messages.ALREADY_ANSWERED);
+                Common.playSound(player, instance.getSettings().soundAnsweredWrong);
 
+                return true;
+
+            } else
+                return false;
         }
 
         playersAnswered.add(player.getUniqueId());
@@ -115,6 +133,8 @@ public class Question {
                 }
             }.runTaskLater(instance, 5));
         }
+
+        return true;
     }
 
     /**
@@ -129,7 +149,7 @@ public class Question {
             public void run() {
                 end();
             }
-        }.runTaskLater(instance, 20*instance.getSettings().timeout));
+        }.runTaskLater(instance, instance.getSettings().timeout.toTicks()));
     }
 
     /**

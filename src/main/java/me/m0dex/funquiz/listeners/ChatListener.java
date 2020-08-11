@@ -39,8 +39,6 @@ public class ChatListener implements Listener {
 
         message = message.replace(instance.getSettings().answerPrefix, "");
 
-        question.checkAnswer(player, message);
-
-        e.setCancelled(true);
+        e.setCancelled(question.checkAnswer(player, message));
     }
 }
