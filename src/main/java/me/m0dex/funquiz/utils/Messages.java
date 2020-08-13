@@ -63,6 +63,8 @@ public enum Messages {
             "\n "),
 
     // Question related messages
+    COUNTDOWN_START("&3&lQuestion &e&l» Next question starting in..."),
+    COUNTDOWN("&e&l%time%"),
     QUESTION("&3&lQuestion &e&l» &a&l%question%"),
     NOT_ENOUGH_PLAYERS("&3&lFunQuiz &e&l» &c&lThere is not enough players for FunQuiz to ask questions!"),
     QUESTION_END("&3&lFunQuiz &e&l» The time to answer the question ran out! The correct answer was: &b&l%answer%&e&l."),

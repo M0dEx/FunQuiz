@@ -16,6 +16,7 @@ public class Time {
     public long toTicks() {
         return milli / 50;
     }
+    public long toMilli() { return milli; }
 
     public boolean isZero() {
         return milli == 0;
@@ -26,6 +27,10 @@ public class Time {
         long _milli = 0;
 
         try {
+
+            if (timeString.equals("0"))
+                return new Time(0);
+
             Pattern timePattern = Pattern.compile("(\\d+)([hms])", Pattern.CASE_INSENSITIVE);
             Matcher matcher = timePattern.matcher(timeString);
 

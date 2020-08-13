@@ -28,6 +28,7 @@ import java.util.logging.Logger;
 
 public class FunQuiz extends JavaPlugin {
 
+    private Configuration mainCfg;
     private Configuration messagesCfg;
     private Configuration questionsCfg;
 
@@ -74,7 +75,7 @@ public class FunQuiz extends JavaPlugin {
             return;
         }
 
-        settings = new Settings(this, getConfig());
+        settings = new Settings(this, mainCfg);
 
         playerCache = new PlayerCache(instance);
 
@@ -109,8 +110,8 @@ public class FunQuiz extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        saveDatabase();
         taskManager.stopTasks();
+        saveDatabase();
         HandlerList.unregisterAll(this);
     }
 
@@ -121,11 +122,12 @@ public class FunQuiz extends JavaPlugin {
 
         taskManager.stopTasks();
 
-        reloadConfig();
-        settings = new Settings(this, this.getConfig());
+        mainCfg.loadConfig();
+        questionsCfg.loadConfig();
+        messagesCfg.loadConfig();
 
-        questionsCfg.reloadConfig();
-        messagesCfg.reloadConfig();
+        settings = new Settings(this, mainCfg);
+
         loadMessages();
 
         questionManager.reload();
@@ -158,12 +160,11 @@ public class FunQuiz extends JavaPlugin {
      */
     private boolean loadConfigs() {
 
+        mainCfg =       new Configuration(this, "", "config.yml");
         messagesCfg =   new Configuration(this, "", "messages.yml");
         questionsCfg =  new Configuration(this, "", "questions.yml");
 
-        boolean success = messagesCfg.reloadConfig() && questionsCfg.reloadConfig();
-
-        settings = new Settings(this, this.getConfig());
+        boolean success = mainCfg.loadConfig() && messagesCfg.loadConfig() && questionsCfg.loadConfig();
 
         loadMessages();
 

@@ -69,7 +69,7 @@ public class QuestionManager {
         triviaTaskID = -1;
 
         //TODO: Handle saving and reloading
-        questionsConf.reloadConfig();
+        questionsConf.loadConfig();
 
         loadQuestions();
 

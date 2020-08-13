@@ -9,10 +9,6 @@ import java.util.List;
 
 public class Settings {
 
-    private FunQuiz instance;
-
-    private FileConfiguration config;
-
     /*
         QUESTIONS
      */
@@ -20,8 +16,10 @@ public class Settings {
     public int answersAccepted;
     public Time timeout;
     public Time interval;
+    public Time countdown;
     public boolean hideAnswer;
 
+    public Sound soundCountdown;
     public Sound soundAsked;
     public Sound soundAnsweredRight;
     public Sound soundAnsweredWrong;
@@ -50,22 +48,23 @@ public class Settings {
     public List<String> disabledWorlds;
     public boolean debug;
 
-    public Settings(FunQuiz _instance, FileConfiguration _config) {
+    public Settings(FunQuiz instance, Configuration configuration) {
 
-        instance = _instance;
-
-        config = _config;
-
-        instance.saveDefaultConfig();
-        instance.getConfig().options().copyDefaults(true);
-        instance.saveConfig();
+        FileConfiguration config = configuration.getConfig();
 
         minPlayers = config.getInt("questions.min-players", 3);
         answersAccepted = config.getInt("questions.answers-accepted", 1);
         timeout = Time.fromTimeString(config.getString("questions.timeout", "10s"));
         interval = Time.fromTimeString(config.getString("questions.interval", "30m"));
+        countdown = Time.fromTimeString(config.getString("questions.countdown", "3s"));
 
         try {
+            String soundCountdownString = config.getString("questions.sounds.countdown", "NONE").toUpperCase().trim();
+            if (soundCountdownString.equals("NONE"))
+                soundCountdown = null;
+            else
+                soundCountdown = Sound.valueOf(soundCountdownString);
+
             String soundAskedString = config.getString("questions.sounds.asked", "NONE").toUpperCase().trim();
             if (soundAskedString.equals("NONE"))
                 soundAsked = null;
@@ -97,7 +96,7 @@ public class Settings {
         otdbEnabled = config.getBoolean("open-trivia-db.enabled", false);
         defaultRewards = config.getStringList("open-trivia-db.default-rewards");
 
-        useSQLite = config.getBoolean("database.use-sqlite", false);
+        useSQLite = config.getBoolean("database.use-sqlite", true);
         hostname = config.getString("database.hostname", "localhost");
         port = config.getInt("database.port", 3306);
         database = config.getString("database.database", "default");

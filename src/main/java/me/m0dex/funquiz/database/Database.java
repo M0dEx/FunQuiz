@@ -139,9 +139,9 @@ public class Database {
                 if (!isConnected()) {
 
                     File dbFile = new File(instance.getDataFolder(), "player_data.db");
-                    if (!dbFile.exists()) {
+
+                    if (!dbFile.exists())
                         dbFile.createNewFile();
-                    }
 
                     Class.forName("org.sqlite.JDBC");
                     DriverManager.registerDriver(new org.sqlite.JDBC());

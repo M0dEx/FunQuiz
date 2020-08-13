@@ -8,16 +8,20 @@ questions:
     answers-accepted: 1
 
     ### Sets the timeout for questions (format: "15s") ###
-    timeout: 10
+    timeout: 10s
 
     ### Sets the interval in which the questions will be automatically asked (format: "1h 30m 50s"). Setting this to 0 will disable this functionality ###
-    interval: 30
+    interval: 30m
+
+    ### Sets the length of the countdown before a question is asked. Set to 0 to disable ###
+    countdown: 3s
 
     ### Sets whether to hide to show or hide the correct answers at the end of the time limit for the question. ###
     hide-answer: false
 
     ### Sets the sounds for certain events. For a list of available sounds for your version of Minecraft visist https://helpch.at/docs/<MINECRAFT_VERSION>/index.html?org/bukkit/Sound.html ###
     sounds:
+        countdown: NONE
         asked: NONE
         answered-right: NONE
         answered-wrong: NONE

@@ -5,40 +5,20 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 public class Configuration {
 
-    private File configFile;
+    private final File configFile;
     private FileConfiguration config;
-    private JavaPlugin instance;
+    private final JavaPlugin instance;
 
     public Configuration(JavaPlugin _instance, String folder, String filename) {
 
         instance = _instance;
 
         configFile = new File(Paths.get(instance.getDataFolder().getAbsolutePath(), folder).toFile(), filename);
-    }
-
-
-    /**
-     * Reloads the config and tries to load it into FileConfiguration variable
-     */
-    public boolean reloadConfig() {
-
-        loadConfig();
-
-        config = new YamlConfiguration();
-
-        try {
-            config.load(configFile);
-
-        } catch(Exception ex) {
-            instance.getLogger().severe("Couldn't read config file " + configFile + "\n" + ex.getLocalizedMessage());
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -53,7 +33,8 @@ public class Configuration {
             return true;
 
         } catch(Exception ex) {
-            instance.getLogger().severe("Couldn't save config file" + configFile + "\n" + ex.getLocalizedMessage());
+            instance.getLogger().severe("Couldn't save config file " + configFile + ":");
+            ex.printStackTrace();
         }
 
         return false;
@@ -63,28 +44,41 @@ public class Configuration {
      *          Tries to load the config from a file.
      *          If it does not exist, it then creates it and if there exists a resource in .jar of the plugin, copies its contents from there
      */
-    private boolean loadConfig() {
+    public boolean loadConfig() {
 
-        if (!configFile.exists()) {
+        try {
 
-            try (InputStream in = instance.getResource(configFile.getName())) {
+            if (!configFile.exists()) {
 
-                configFile.getParentFile().mkdirs();
-                configFile.createNewFile();
-
-                try (OutputStream out = new FileOutputStream(configFile)) {
-
-                    if (in != null) {
-                        int b;
-                        while ((b = in.read()) != -1)
-                            out.write(b);
-                    }
-
+                if (instance.getResource(configFile.getName()) != null)
+                    instance.saveResource(configFile.getName(), false);
+                else {
+                    configFile.getParentFile().mkdirs();
+                    configFile.createNewFile();
                 }
-            } catch (IOException ex) {
-                instance.getLogger().severe("Couldn't write to config file " + configFile + "\n" + ex.getLocalizedMessage());
-                return false;
+
+                config = YamlConfiguration.loadConfiguration(configFile);
+
+            } else {
+
+                config = YamlConfiguration.loadConfiguration(configFile);
+
+                InputStream in = instance.getResource(configFile.getName());
+
+                if (in == null)
+                    return true;
+
+                YamlConfiguration newConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(in, StandardCharsets.UTF_8));
+
+                config.setDefaults(newConfig);
             }
+
+            config.save(configFile);
+
+        } catch(Exception ex) {
+            instance.getLogger().severe("Couldn't load config file " + configFile + ":");
+            ex.printStackTrace();
+            return false;
         }
 
         return true;

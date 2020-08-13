@@ -1,5 +1,7 @@
 package me.m0dex.funquiz.questions;
 
+import co.aikar.taskchain.TaskChain;
+import co.aikar.taskchain.TaskChainFactory;
 import me.m0dex.funquiz.FunQuiz;
 import me.m0dex.funquiz.utils.Common;
 import me.m0dex.funquiz.utils.Messages;
@@ -141,6 +143,40 @@ public class Question {
      * Sends the question into the chat and starts the timer task to end the question
      */
     public void run() {
+
+        long countdownMilli = instance.getSettings().countdown.toMilli();
+
+        if(countdownMilli > 0) {
+
+            TaskChain<?> countdown = instance.getTaskFactory().newChain();
+            countdown
+                    .sync(() -> countdown.setTaskData("countdownMilli", countdownMilli))
+                    .async(() -> {
+                        Common.broadcast(Messages.COUNTDOWN_START.getMessage(), instance.getSettings().disabledWorlds);
+
+                        long milli = countdown.getTaskData("countdownMilli");
+
+                        while(milli > 0) {
+
+                            Common.broadcast(Messages.COUNTDOWN.getMessage("%time%-" + milli/1000), instance.getSettings().disabledWorlds);
+                            Common.broadcastSound(instance.getSettings().soundCountdown, instance.getSettings().disabledWorlds);
+
+                            try {
+                                Thread.sleep(1000);
+                            } catch(InterruptedException e) {}
+
+                            milli -= 1000;
+                        }
+                    })
+                    .sync(this::ask)
+                    .execute();
+
+        } else
+            ask();
+    }
+
+    private void ask() {
+
         Common.broadcast(Messages.QUESTION.getMessage("%question%-" + question ), instance.getSettings().disabledWorlds);
         Common.broadcastSound(instance.getSettings().soundAsked, instance.getSettings().disabledWorlds);
         instance.getQuestionManager().setActiveQuestion(this);
@@ -162,7 +198,7 @@ public class Question {
         if(this.hideAnswer)
             Common.broadcast(Messages.QUESTION_END_NO_ASNWER.getMessage(), instance.getSettings().disabledWorlds);
         else
-            Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers.get(0)), instance.getSettings().disabledWorlds);
+            Common.broadcast(Messages.QUESTION_END.getMessage( "%answer%-" + answers), instance.getSettings().disabledWorlds);
 
         Common.broadcast(Messages.QUESTION_END_STATS.getMessage("%correct%-" + answeredRight + ";%incorrect%-" + answeredWrong), instance.getSettings().disabledWorlds);
 
