@@ -45,9 +45,8 @@ public class Time {
                         _milli += amount * 60 * 1000;
                         break;
                     case "s":
-                        _milli += amount * 1000;
-                        break;
                     default:
+                        _milli += amount * 1000;
                         break;
                 }
             }
